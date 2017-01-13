@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Copyright (C) Microsoft Corporation. All rights reserved.
+Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <Template>
+      <OutputFilePath>$(OutputPath)%(Filename)%(Extension)</OutputFilePath>
+    </Template>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <AvailableItemName Include="Template" />
+  </ItemGroup>
+
+  <!-- Task to replace regular exprssion with given text -->
+  <UsingTask TaskName="ReplaceToken" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <InputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <OutputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      <Expression ParameterType="System.String" Required="true" />
+      <Text ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Reference Include="$(MSBuildToolsPath)\Microsoft.Build.Utilities.Core.dll" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="Microsoft.Build.Utilities" />
+      <Code Type="Fragment" Language="C#">
+        <![CDATA[
+        for (var i = 0; i < InputFiles.Length; ++i)
+        {
+          string content;
+          Encoding encoding;
+
+          var path = InputFiles[i].ItemSpec;
+          using (var reader = new StreamReader(path, Encoding.UTF8, true))
+          {
+            content = reader.ReadToEnd();
+            encoding = reader.CurrentEncoding;
+
+            content = Regex.Replace(content, Expression, Text);
+
+            if (OutputFiles != null && i < OutputFiles.Length)
+            {
+              path = OutputFiles[i].ItemSpec;
+
+              var directory = Path.GetDirectoryName(path);
+              Directory.CreateDirectory(directory);
+            }
+          }
+
+          File.WriteAllText(path, content, encoding);
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <!-- Simple transformation target to replace tokens without dependency on T4 -->
+  <Target Name="Transform" BeforeTargets="CoreCompile" DependsOnTargets="GetBuildVersion" Inputs="@(Template)" Outputs="%(Template.OutputFilePath)">
+    <Message Text="Transforming: &quot;%(Template.Identity)&quot; -> &quot;%(Template.OutputFilePath)&quot;" />
+    <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersion)" />
+  </Target>
+</Project>

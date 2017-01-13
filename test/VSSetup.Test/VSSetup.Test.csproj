@@ -17,7 +17,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
-    <CodeAnalysisRuleSet>$(SolutionDir)inc\Common.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\inc\Common.ruleset</CodeAnalysisRuleSet>
     <NoWarn>$(NoWarn);CS1591;SA1600;SA1652</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
