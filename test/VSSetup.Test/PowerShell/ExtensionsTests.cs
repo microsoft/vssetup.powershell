@@ -6,11 +6,100 @@
 namespace Microsoft.VisualStudio.Setup.PowerShell
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Management.Automation;
     using Xunit;
 
     public class ExtensionsTests
     {
+#pragma warning disable SA1401 // Fields must be private
+        public static IEnumerable<object[]> ContainsAllExceptionCases = new[]
+        {
+            new object[] { "source", null, null, null },
+            new object[] { "selector", new[] { new Tuple<string, int>("a", 1) }, null, null },
+            new object[] { "keys", new[] { new Tuple<string, int>("a", 1) }, new Func<Tuple<string, int>, string>(item => item.Item1), null },
+        };
+#pragma warning restore SA1401 // Fields must be private
+
+        [Theory]
+        [MemberData(nameof(ContainsAllExceptionCases))]
+        public void ContainsAll_Null_Throws(string paramName, IEnumerable<Tuple<string, int>> source, Func<Tuple<string, int>, string> selector, IEnumerable<string> keys)
+        {
+            Assert.Throws<ArgumentNullException>(paramName, () => source.ContainsAll(selector, keys));
+        }
+
+        [Fact]
+        public void ContainsAll_Empty_Source_Empty_Keys()
+        {
+            var items = new Tuple<string, int>[0];
+            var keys = Enumerable.Empty<string>();
+
+            Assert.True(items.ContainsAll(item => item.Item1, keys));
+        }
+
+        [Fact]
+        public void ContainsAll_Empty_Source_With_Keys()
+        {
+            var items = new Tuple<string, int>[0];
+            var keys = new[] { "a" };
+
+            Assert.False(items.ContainsAll(item => item.Item1, keys));
+        }
+
+        [Fact]
+        public void ContainsAll_With_Source_Empty_Keys()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = Enumerable.Empty<string>();
+
+            Assert.True(items.ContainsAll(item => item.Key, keys));
+        }
+
+        [Fact]
+        public void ContainsAll_Without_Keys()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = new[]
+            {
+                "a",
+                "x",
+            };
+
+            Assert.False(items.ContainsAll(item => item.Key, keys));
+        }
+
+        [Fact]
+        public void ContainsAll()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = new[]
+            {
+                "a",
+                "c",
+            };
+
+            Assert.True(items.ContainsAll(item => item.Key, keys));
+        }
+
         [Fact]
         public void GetPropertyValue_Object_Null_Throws()
         {

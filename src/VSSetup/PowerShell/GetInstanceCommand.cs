@@ -17,13 +17,14 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     /// The Get-VSSetupInstance command.
     /// </summary>
     [Cmdlet(VerbsCommon.Get, "VSSetupInstance", DefaultParameterSetName = AllParameterSet)]
+    [OutputType(typeof(Instance))]
     public class GetInstanceCommand : PSCmdlet
     {
         private const string AllParameterSet = "All";
         private const string PathParameterSet = "Path";
         private const string LiteralPathParameterSet = "LiteralPath";
 
-        private ISetupConfiguration2 query;
+        private ISetupConfiguration2 query = null;
 
         /// <summary>
         /// Gets or sets the All parameter.
@@ -119,8 +120,11 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
         private void WriteInstance(ISetupInstance2 instance)
         {
-            var adapted = new Instance(instance);
-            WriteObject(adapted);
+            if (instance != null)
+            {
+                var adapted = new Instance(instance);
+                WriteObject(adapted);
+            }
         }
     }
 }

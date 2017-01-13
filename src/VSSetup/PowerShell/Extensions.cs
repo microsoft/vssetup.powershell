@@ -6,6 +6,7 @@
 namespace Microsoft.VisualStudio.Setup.PowerShell
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
 
@@ -14,6 +15,43 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     /// </summary>
     internal static class Extensions
     {
+        /// <summary>
+        /// Determines if the results of the <paramref name="selector"/> applied to the <paramref name="source"/> enumerable
+        /// contain all the elements from the <paramref name="keys"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the source enumerable.</typeparam>
+        /// <typeparam name="TKey">The type of the keys.</typeparam>
+        /// <param name="source">The source enumerable to check.</param>
+        /// <param name="selector">The selector to apply to the <paramref name="source"/> enumerable.</param>
+        /// <param name="keys">The keys to check if all are in the <paramref name="source"/> enumerable.</param>
+        /// <param name="comparer">The comparer to use. The default is <see cref="EqualityComparer{T}.Default"/>.</param>
+        /// <returns>
+        /// True if the results of the <paramref name="selector"/> applied to the <paramref name="source"/> enumerable
+        /// contain all the elements from the <paramref name="keys"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">One or more parameters are null.</exception>
+        public static bool ContainsAll<T, TKey>(this IEnumerable<T> source, Func<T, TKey> selector, IEnumerable<TKey> keys, IEqualityComparer<TKey> comparer = null)
+        {
+            Validate.NotNull(source, nameof(source));
+            Validate.NotNull(selector, nameof(selector));
+            Validate.NotNull(keys, nameof(keys));
+
+            comparer = comparer ?? EqualityComparer<TKey>.Default;
+
+            var e = source.Select(selector);
+            var items = new HashSet<TKey>(e, comparer);
+
+            foreach (var key in keys)
+            {
+                if (!items.Contains(key))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Gets the named property value of type <typeparamref name="T"/>.
         /// </summary>
