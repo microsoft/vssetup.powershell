@@ -80,6 +80,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="VSSetup.types.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Template Include="VSSetup.psd1" />
   </ItemGroup>
   <ItemGroup>
