@@ -5,6 +5,7 @@
 
 using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
@@ -18,6 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright (C) Microsoft Corporation. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en-US")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -27,4 +29,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("f77937d9-8b7c-46ac-80d3-dfde39eb3279")]
 
-[assembly: NeutralResourcesLanguage("en-US")]
+// The following assemblies can access internal members.
+[assembly: InternalsVisibleTo("Microsoft.VisualStudio.Setup.PowerShell.Test")]
