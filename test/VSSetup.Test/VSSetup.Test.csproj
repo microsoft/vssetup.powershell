@@ -100,7 +100,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="$(Solutiondir)stylecop.json">
+    <AdditionalFiles Include="..\..\stylecop.json">
       <Visible>false</Visible>
     </AdditionalFiles>
   </ItemGroup>
