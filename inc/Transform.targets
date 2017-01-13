@@ -20,7 +20,7 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
   <UsingTask TaskName="ReplaceToken" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <InputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
-      <OutputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      <OutputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
       <Expression ParameterType="System.String" Required="true" />
       <Text ParameterType="System.String" Required="true" />
     </ParameterGroup>
@@ -66,6 +66,8 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
   <!-- Simple transformation target to replace tokens without dependency on T4 -->
   <Target Name="Transform" BeforeTargets="CoreCompile" DependsOnTargets="GetBuildVersion" Inputs="@(Template)" Outputs="%(Template.OutputFilePath)">
     <Message Text="Transforming: &quot;%(Template.Identity)&quot; -> &quot;%(Template.OutputFilePath)&quot;" />
-    <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersion)" />
+    <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersion)">
+      <Output TaskParameter="OutputFiles" ItemName="FileWrites" />
+    </ReplaceToken>
   </Target>
 </Project>
