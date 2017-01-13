@@ -6,6 +6,7 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using Configuration;
     using Moq;
@@ -20,7 +21,7 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         [Fact]
-        public void New_Bad_InstanceId_Throws()
+        public void New_Missing_InstanceId_Throws()
         {
             var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Throws(new COMException("Not found", NativeMethods.E_NOTFOUND));
@@ -30,7 +31,7 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         [Fact]
-        public void New_Bad_InstallationName()
+        public void New_Missing_InstallationName()
         {
             var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
@@ -52,7 +53,7 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         [Fact]
-        public void New_Invalid_InstallDate()
+        public void New_Invalid_InstallationVersion()
         {
             var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
@@ -63,7 +64,7 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         [Fact]
-        public void New_InstallDate()
+        public void New_InstallationVersion()
         {
             var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
@@ -71,6 +72,71 @@ namespace Microsoft.VisualStudio.Setup
 
             var sut = new Instance(instance.Object);
             Assert.Equal(new Version(1, 2, 3, 4), sut.InstallationVersion);
+        }
+
+        [Fact]
+        public void New_Product_Null()
+        {
+            var instance = new Mock<ISetupInstance2>();
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+
+            var sut = new Instance(instance.Object);
+            Assert.Null(sut.Product);
+        }
+
+        [Fact]
+        public void New_Product()
+        {
+            var product = Mock.Of<ISetupPackageReference>(x => x.GetId() == "product");
+
+            var instance = new Mock<ISetupInstance2>();
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            instance.Setup(x => x.GetProduct()).Returns(product);
+
+            var sut = new Instance(instance.Object);
+            Assert.NotNull(sut.Product);
+            Assert.Equal("product", sut.Product.Id);
+        }
+
+        [Fact]
+        public void New_Packages_Null()
+        {
+            var instance = new Mock<ISetupInstance2>();
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+
+            var sut = new Instance(instance.Object);
+            Assert.Null(sut.Packages);
+        }
+
+        [Fact]
+        public void New_Packages_Empty()
+        {
+            var instance = new Mock<ISetupInstance2>();
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            instance.Setup(x => x.GetPackages()).Returns(Enumerable.Empty<ISetupPackageReference>().ToArray());
+
+            var sut = new Instance(instance.Object);
+            Assert.Null(sut.Packages);
+        }
+
+        [Fact]
+        public void New_Packages()
+        {
+            var references = new[]
+            {
+                Mock.Of<ISetupPackageReference>(x => x.GetId() == "a"),
+                Mock.Of<ISetupPackageReference>(x => x.GetId() == "b"),
+            };
+
+            var instance = new Mock<ISetupInstance2>();
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            instance.Setup(x => x.GetPackages()).Returns(references);
+
+            var sut = new Instance(instance.Object);
+            Assert.Collection(
+                sut.Packages,
+                x => Assert.Equal("a", x.Id),
+                x => Assert.Equal("b", x.Id));
         }
     }
 }

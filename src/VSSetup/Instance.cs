@@ -6,8 +6,11 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using Configuration;
 
@@ -24,6 +27,8 @@ namespace Microsoft.VisualStudio.Setup
         private readonly string displayName;
         private readonly string description;
         private readonly string productPath;
+        private readonly PackageReference product;
+        private readonly IList<PackageReference> packages;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Instance"/> class.
@@ -78,6 +83,27 @@ namespace Microsoft.VisualStudio.Setup
                 var path = instance.GetProductPath();
                 return instance.ResolvePath(path);
             });
+
+            TrySet(ref product, nameof(Product), () =>
+            {
+                var reference = instance.GetProduct();
+                if (reference != null)
+                {
+                    return new PackageReference(reference);
+                }
+
+                return null;
+            });
+
+            TrySet(ref packages, nameof(Packages), () =>
+            {
+                return new List<PackageReference>(GetPackages(instance));
+            });
+
+            if (packages != null && packages.Any())
+            {
+                Packages = new ReadOnlyCollection<PackageReference>(packages);
+            }
         }
 
         /// <summary>
@@ -124,6 +150,31 @@ namespace Microsoft.VisualStudio.Setup
         /// Gets the path to the main product to launch.
         /// </summary>
         public string ProductPath => productPath;
+
+        /// <summary>
+        /// Gets a <see cref="PackageReference"/> for the installed product.
+        /// </summary>
+        public PackageReference Product => product;
+
+        /// <summary>
+        /// Gets a collection of <see cref="PackageReference"/> installed to the instance.
+        /// </summary>
+        public ReadOnlyCollection<PackageReference> Packages { get; }
+
+        private static IEnumerable<PackageReference> GetPackages(ISetupInstance2 instance)
+        {
+            var references = instance.GetPackages();
+            if (references != null)
+            {
+                foreach (var reference in instance.GetPackages())
+                {
+                    if (reference != null)
+                    {
+                        yield return new PackageReference(reference);
+                    }
+                }
+            }
+        }
 
         private void TrySet<T>(ref T property, string propertyName, Func<T> action)
         {

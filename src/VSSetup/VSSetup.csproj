@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Instance.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="PackageReference.cs" />
     <Compile Include="PowerShell\Extensions.cs" />
     <Compile Include="PowerShell\GetInstanceCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

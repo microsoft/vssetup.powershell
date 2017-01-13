@@ -91,6 +91,13 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             }
         }
 
+        /// <inheritdoc/>
+        protected override void EndProcessing()
+        {
+            // Release the COM object and its resources ASAP.
+            query = null;
+        }
+
         private IEnumerable<ISetupInstance2> GetInstances()
         {
             var e = All ? query.EnumAllInstances() : query.EnumInstances();
