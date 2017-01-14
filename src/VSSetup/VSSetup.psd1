@@ -10,5 +10,6 @@ ModuleVersion = '$BuildVersion$'
 PowerShellVersion = '3.0'
 CLRVersion = '4.0'
 RootModule = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
+RequiredAssemblies = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
 TypesToProcess = 'VSSetup.types.ps1xml'
 }
