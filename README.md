@@ -3,8 +3,7 @@ Visual Studio Setup PowerShell Module
 
 This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples](https://github.com/microsoft/vs-setup-samples) though those also have samples using VB and VC++.
 
-Installing
-----------
+## Installing
 
 You can download packages from the Releases page for this project on GitHub, but with Windows Management Framework 5.0 or newer (which installs PowerShell and comes with Windows 10), you can download and install this module even easier.
 
@@ -12,8 +11,7 @@ You can download packages from the Releases page for this project on GitHub, but
 Install-Module VSSetup -Scope CurrentUser
 ```
 
-Using
------
+## Using
 
 You can query all usable instances of Visual Studio and other products installed by the Visual Studio installer.
 
@@ -33,7 +31,6 @@ If you want to select the latest instance that contains the .NET desktop develop
 Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStudio.Workload.ManagedDesktop' -Latest
 ```
 
-Feedback
---------
+## Feedback
 
 To file issues or suggestions, please use the Issues page for this project on GitHub.
