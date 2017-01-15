@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FEED13D9-C881-407F-A945-7555704789C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSSetup", "src\VSSetup\VSSetup.csproj", "{F77937D9-8B7C-46AC-80D3-DFDE39EB3279}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSSetup.PowerShell", "src\VSSetup.PowerShell\VSSetup.PowerShell.csproj", "{F77937D9-8B7C-46AC-80D3-DFDE39EB3279}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSSetup.Test", "test\VSSetup.Test\VSSetup.Test.csproj", "{ED12C009-A3E6-4F22-999A-FCA8C84DB41A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSSetup.PowerShell.Test", "test\VSSetup.PowerShell.Test\VSSetup.PowerShell.Test.csproj", "{ED12C009-A3E6-4F22-999A-FCA8C84DB41A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{73C57796-F1DD-49D8-9A5D-9F58764C0078}"
 EndProject

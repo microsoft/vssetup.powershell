@@ -91,9 +91,9 @@
     <Compile Include="ValidateTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\VSSetup\VSSetup.csproj">
+    <ProjectReference Include="..\..\src\VSSetup.PowerShell\VSSetup.PowerShell.csproj">
       <Project>{f77937d9-8b7c-46ac-80d3-dfde39eb3279}</Project>
-      <Name>VSSetup</Name>
+      <Name>VSSetup.PowerShell</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
