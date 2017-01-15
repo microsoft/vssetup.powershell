@@ -3,8 +3,7 @@ configuration:
   - Release
 
 environment:
-  apikey:
-    secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
+  RunCodeAnalysis: true
 
 branches:
   only:
@@ -17,9 +16,6 @@ notifications:
   - provider: GitHubPullRequest
     on_build_success: true
     on_build_failure: true
-
-install:
-  - tools\init.ps1 -v
 
 cache:
   - packages -> **\packages.config
@@ -36,6 +32,9 @@ artifacts:
     name: VSSetup
     type: zip
 
+  - path: src\VSSetup\bin\$(configuration)\*.nupkg
+    name: package
+
 deploy:
   - provider: GitHub
     auth_token:
@@ -45,7 +44,13 @@ deploy:
       branch: master
       configuration: Release
 
-after_deploy:
-  - tools\publish.ps1 -configuration $(configuration) -apikey %apikey% -v
+  - provider: NuGet
+    server: https://powershellgallery.com
+    api_key:
+      secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
+    artifact: package
+    on:
+      branch: master
+      configuration: Release
 
 # vim: set ai et st=2 sts=2 sw=2:
