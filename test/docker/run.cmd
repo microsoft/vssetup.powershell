@@ -18,8 +18,8 @@ if /i "%1"=="-name" set name=%2& shift& shift& goto :parse
 if /i "%1"=="/name" set name=%2& shift& shift& goto :parse
 if /i "%1"=="-configuration" set configuration=%2& shift& shift& goto :parse
 if /i "%1"=="/configuration" set configuration=%2& shift& shift& goto :parse
-if /i "%1"=="-network" set params=%params% --network %2& shift& shift& goto :parse
-if /i "%1"=="/network" set params=%params% --network %2& shift& shift& goto :parse
+if /i "%1"=="-network" set params=%params% --network "%2"& shift& shift& goto :parse
+if /i "%1"=="/network" set params=%params% --network "%2"& shift& shift& goto :parse
 if /i "%1"=="-keep" set keep=1& shift& goto :parse
 if /i "%1"=="/keep" set keep=1& shift& goto :parse
 if "%1"=="-?" goto :help

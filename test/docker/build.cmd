@@ -27,7 +27,7 @@ goto :help
 
 :parse_end
 if "%network%"=="" (
-    for /f "usebackq" %%i in (`docker network ls --filter driver^=transparent --format "{{.Name}}"`) do (
+    for /f "usebackq tokens=*" %%i in (`docker network ls --filter driver^=transparent --format "{{.Name}}"`) do (
         echo Discovered transparent network: %%i
         set network=%%i
     )
@@ -44,7 +44,7 @@ REM Remove trailing backslash or command may fail.
 set root=%projectDir:~0,-1%
 
 @echo on
-docker build --network %network% --tag %name% "%root%"
+docker build --network "%network%" --tag %name% "%root%"
 
 @echo off
 echo.
