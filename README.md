@@ -1,7 +1,7 @@
 Visual Studio Setup PowerShell Module
 =====================================
 
-This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples](https://github.com/microsoft/vs-setup-samples) though those also have samples using VB and VC++.
+This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples][samples] though those also have samples using VB and VC++.
 
 ## Installing
 
@@ -34,3 +34,5 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 ## Feedback
 
 To file issues or suggestions, please use the Issues page for this project on GitHub.
+
+  [samples]: https://aka.ms/setup/configuration/samples

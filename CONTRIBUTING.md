@@ -7,9 +7,13 @@ This project uses the following software. Newer versions may work but backward c
 
 * [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
 
+## Coding
+
+These cmdlets use the setup configuration API. [Documentation][docs] is available on MSDN, as well as [samples][samples] of how the APIs can be used.
+
 ## Building
 
-Before you can build this project from the command line with MSBuild or within Visual Studio, you must restore packages.
+Before you can build this project from the command line with MSBuild or within Visual Studio, you must restore packages including the [embeddable interop types][interop].
 
 * In Visual Studio, make sure Package Restore is enabled.
 * On the command line and assuming _nuget.exe_ is in your `PATH`, in the solution directory run: `nuget restore`
@@ -35,3 +39,7 @@ We welcome pull requests for both bug fixes and new features that solve a common
 2. All tests must pass. We have automated PR builds that will verify any PRs before they can be merged, but you are encouraged to run all tests in your development environment prior to pushing to your remote.
 
 Thank you for your contributions!
+
+  [samples]: https://aka.ms/setup/configuration/samples
+  [docs]: https://aka.ms/setup/configuration/docs
+  [interop]: https://aka.ms/setup/configuration/interop
