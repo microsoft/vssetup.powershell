@@ -52,6 +52,16 @@ deploy:
     api_key:
       secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
     artifact: package
+    skip_symbols: true
+    on:
+      branch: master
+      configuration: Release
+
+  - provider: NuGet
+    server: https://nuget.smbsrc.net/
+    api_key:
+      secure: WPxjuSouwbCdM6I771BfIbOk8gA883+l9RKUCfFknaUT1vYPmTpT2ABF9r+J0JgR
+    artifact: /.*\.symbols\.nupkg/
     on:
       branch: master
       configuration: Release
