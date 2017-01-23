@@ -45,6 +45,7 @@ set root=%projectDir:~0,-1%
 
 @echo on
 docker build --network "%network%" --tag %name% "%root%"
+@if errorlevel 1 exit /b %ERRORLEVEL%
 
 @echo off
 echo.

@@ -25,4 +25,7 @@ ADD ["Instances/", "C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances/"]
 RUN $ErrorActionPreference = 'Stop' ; \
     New-Item -Path C:\VS\Community, C:\VS\Enterprise, C:\VS\Professional, C:\BuildTools -Type Directory | Out-Null
 
+# Copy tests
+ADD ["Tests", "C:/Tests"]
+
 ENTRYPOINT ["powershell.exe", "-ExecutionPolicy", "Unrestricted"]

@@ -39,6 +39,7 @@ set outputPath=%solutionDir%src\VSSetup.PowerShell\bin\%configuration%
 
 @echo on
 docker run -it -v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup" %params% %name% %args%
+@if errorlevel 1 exit /b %ERRORLEVEL%
 
 @echo off
 echo.
