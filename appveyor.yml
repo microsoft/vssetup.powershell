@@ -4,6 +4,7 @@ configuration:
 
 environment:
   RunCodeAnalysis: true
+  TreatWarningsAsErrors: true
 
 branches:
   only:
