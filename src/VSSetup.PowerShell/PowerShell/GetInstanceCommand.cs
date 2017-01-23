@@ -57,12 +57,22 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         protected override void BeginProcessing()
         {
-            query = new SetupConfiguration();
+            query = QueryFactory.Create();
+            if (query == null)
+            {
+                WriteWarning(Resources.NotRegistered);
+            }
         }
 
         /// <inheritdoc/>
         protected override void ProcessRecord()
         {
+            if (query == null)
+            {
+                StopProcessing();
+                return;
+            }
+
             if (AllParameterSet.Equals(ParameterSetName, StringComparison.OrdinalIgnoreCase))
             {
                 foreach (var instance in GetInstances())
