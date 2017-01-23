@@ -23,14 +23,17 @@ cache:
 before_build:
   - nuget restore
 
+after_build:
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
+
 test:
   assemblies:
     - '**\bin\$(configuration)\*.test.dll'
 
 artifacts:
-  - path: src\VSSetup.PowerShell\bin\$(configuration)
+  - path: bin\$(configuration)\VSSetup.zip
     name: VSSetup
-    type: zip
 
   - path: src\VSSetup\bin\$(configuration)\*.nupkg
     name: package
