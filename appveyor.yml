@@ -1,0 +1,56 @@
+configuration:
+  - Debug
+  - Release
+
+environment:
+  RunCodeAnalysis: true
+
+branches:
+  only:
+    - master
+    - develop
+
+skip_tags: true
+
+notifications:
+  - provider: GitHubPullRequest
+    on_build_success: true
+    on_build_failure: true
+
+cache:
+  - packages -> **\packages.config
+
+before_build:
+  - nuget restore
+
+test:
+  assemblies:
+    - '**\bin\$(configuration)\*.test.dll'
+
+artifacts:
+  - path: src\VSSetup.PowerShell\bin\$(configuration)
+    name: VSSetup
+    type: zip
+
+  - path: src\VSSetup\bin\$(configuration)\*.nupkg
+    name: package
+
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: 5K94QY8dHKlbjvlBpQaXwAkmDf+LQE3g5WlU9snnNMjDjf0UT4xDoOBCLWcmwZOm
+    artifact: VSSetup
+    on:
+      branch: master
+      configuration: Release
+
+  - provider: NuGet
+    server: https://powershellgallery.com
+    api_key:
+      secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
+    artifact: package
+    on:
+      branch: master
+      configuration: Release
+
+# vim: set ai et st=2 sts=2 sw=2:

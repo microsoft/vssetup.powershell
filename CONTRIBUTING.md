@@ -7,9 +7,19 @@ This project uses the following software. Newer versions may work but backward c
 
 * [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx)
 
+### Optional
+
+Some projects require optional software to open or otherwise use in Visual Studio. They are not required to build the solution using MSBuild.
+
+* [NuProj Package Project](https://marketplace.visualstudio.com/items?itemName=NuProjTeam.NuGetPackageProject)
+
 ## Coding
 
 These cmdlets use the setup configuration API. [Documentation][docs] is available on MSDN, as well as [samples][samples] of how the APIs can be used.
+
+Code analysis and style cop rules are defined for this solution, but are currently not enforced during build for performance reasons or treated as errors. This may change in the future. Please resolve any build warnings in the code editor or **Error List** window.
+
+If you add any commands please update the `Tags` property of the _VSSetup.nuproj_ project as appropriate. This project is used instead of `Publish-Module` from the _PowerShellGet_ module because it works better with the build systems and can be tested on developer machines without also publishing.
 
 ## Building
 
