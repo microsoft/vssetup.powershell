@@ -5,4 +5,7 @@ REM Licensed under the MIT license. See LICENSE.txt in the project root for lice
 
 setlocal
 
-%~dp0run.cmd %* -- -c Invoke-Pester C:\Tests -EnableExit
+set script=%~nx0
+set noargs=1
+
+call %~dp0run.cmd %* -- -c Invoke-Pester C:\Tests -EnableExit

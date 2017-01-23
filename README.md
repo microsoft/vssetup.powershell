@@ -5,10 +5,18 @@ This PowerShell module contains cmdlets to query instances of Visual Studio 2017
 
 ## Installing
 
-You can download packages from the Releases page for this project on GitHub, but with Windows Management Framework 5.0 or newer (which installs PowerShell and comes with Windows 10), you can download and install this module even easier.
+With Windows Management Framework 5.0 or newer (which installs PowerShell and comes with Windows 10), or [PowerShellGet][oneget] for PowerShell 3.0 or 4.0, you can download and install this module easily.
 
 ```powershell
 Install-Module VSSetup -Scope CurrentUser
+```
+
+To install for all users, pass `AllUsers` instead of `CurrentUser`, or just leave the `-Scope` parameter out of the command entirely.
+
+You can also download the ZIP package from the [Releases][releases] page on this project site and extract to a directory named _VSSetup_ under a directory in your `$env:PSMODULEPATH`.
+
+```powershell
+Expand-Archive VSSetup.zip "${env:USERPROFILE}\Documents\WindowsPowerShell\Modules\VSSetup"
 ```
 
 ## Using
@@ -33,7 +41,7 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 
 ## Feedback
 
-To file issues or suggestions, please use the Issues page for this project on GitHub.
+To file issues or suggestions, please use the [Issues][issues] page for this project on GitHub.
 
 ## Status
 
@@ -44,4 +52,7 @@ Branch  | Status
 master  | [![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/master)
 develop | [![build status: develop](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/develop?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/develop)
 
+  [issues]: https://github.com/Microsoft/vssetup.powershell/issues
+  [oneget]: http://go.microsoft.com/fwlink/?LinkID=746217
+  [releases]: https://github.com/Microsoft/vssetup.powershell/releases
   [samples]: https://aka.ms/setup/configuration/samples

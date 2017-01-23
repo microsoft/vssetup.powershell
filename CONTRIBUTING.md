@@ -38,10 +38,22 @@ All available tests are discovered after a complete build in Test Explorer withi
 
 On the command line, you can run the following commands from the solution directory. Replace `<version>` with whatever version was downloaded.
 
-```
+```batch
 nuget install xunit.runner.console -outputdirectory packages
 packages\xunit.runner.console.<version>\tools\xunit.runner.console test\VSSetup.PowerShell.Test\bin\Debug\Microsoft.VisualStudio.Setup.PowerShell.Test.dll
 ```
+
+It's also recommended that, if your machine supports it, you install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior.
+
+```batch
+# You only need to build once unless changing files under test\docker.
+test\docker\build.cmd
+
+# This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
+test\docker\test.cmd
+```
+
+You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing.
 
 ## Pull Requests
 
@@ -52,6 +64,7 @@ We welcome pull requests for both bug fixes and new features that solve a common
 
 Thank you for your contributions!
 
+  [docker]: https://www.docker.com/products/overview
   [samples]: https://aka.ms/setup/configuration/samples
   [docs]: https://aka.ms/setup/configuration/docs
   [interop]: https://aka.ms/setup/configuration/interop

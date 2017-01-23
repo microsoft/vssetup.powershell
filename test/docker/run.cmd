@@ -5,6 +5,8 @@ REM Licensed under the MIT license. See LICENSE.txt in the project root for lice
 
 setlocal
 
+if "%script%"=="" set script=%~nx0
+
 set projectDir=%~dp0
 set solutionDir=%projectDir:~0,-12%
 
@@ -46,8 +48,12 @@ echo.
 goto :EOF
 
 :help
+set usage=%script% [options] [-?]
+if "%noargs%"=="" (
+    set usage=%usage% [-- args]
+)
 echo.
-echo %~nx0 [options] [-?] [-- <args>]
+echo %usage%
 echo.
 echo Options:
 echo -name          Image name. Defaults to vssetup/test.
@@ -56,8 +62,10 @@ echo -network       External network name. Defaults to discovered transparent ne
 echo -keep          Do not delete the container after exiting.
 echo -?             Displays this help message.
 echo.
+if "%noargs%"=="" (
 echo Arguments:
 echo --             Any arguments after -- are passed to the container entry point.
 echo.
+)
 
 exit /b 87
