@@ -46,11 +46,11 @@ packages\xunit.runner.console.<version>\tools\xunit.runner.console test\VSSetup.
 It's also recommended that, if your machine supports it, you install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior.
 
 ```batch
-# You only need to build once unless changing files under test\docker.
-test\docker\build.cmd
+REM You only need to build once unless changing files under test\docker.
+test\docker\build
 
-# This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
-test\docker\test.cmd
+REM This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
+test\docker\test
 ```
 
 You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing.
