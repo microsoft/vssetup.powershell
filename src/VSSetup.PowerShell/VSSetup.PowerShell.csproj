@@ -14,7 +14,6 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\..\inc\Common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,7 +42,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.PowerShell.3.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
@@ -89,11 +88,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\inc\Transform.targets" />
-  <Import Project="..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets'))" />
+    <Error Condition="!Exists('..\..\packages\NuProj.Common.0.11.14-beta\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NuProj.Common.0.11.14-beta\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets'))" />
   </Target>
+  <Import Project="..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.5.62\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" />
+  <Import Project="..\..\packages\NuProj.Common.0.11.14-beta\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets" Condition="Exists('..\..\packages\NuProj.Common.0.11.14-beta\build\portable-net+win+wpa+wp+sl+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets')" />
 </Project>
