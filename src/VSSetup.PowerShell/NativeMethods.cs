@@ -14,5 +14,10 @@ namespace Microsoft.VisualStudio.Setup
         /// Element not found (as HRESULT).
         /// </summary>
         public const int E_NOTFOUND = unchecked((int)0x80070490);
+
+        /// <summary>
+        /// Class not registered.
+        /// </summary>
+        public const int REGDB_E_CLASSNOTREG = unchecked((int)0x80040154);
     }
 }

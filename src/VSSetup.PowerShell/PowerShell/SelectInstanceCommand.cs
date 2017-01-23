@@ -9,9 +9,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
-    using System.Runtime.InteropServices;
     using Configuration;
-    using Properties;
 
     /// <summary>
     /// The Get-VSSetupInstance command.
@@ -57,7 +55,11 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         protected override void BeginProcessing()
         {
-            helper = (ISetupHelper)new SetupConfiguration();
+            var query = QueryFactory.Create();
+            if (query != null)
+            {
+                helper = (ISetupHelper)new SetupConfiguration();
+            }
         }
 
         /// <inheritdoc/>
