@@ -23,14 +23,17 @@ cache:
 before_build:
   - nuget restore
 
+after_build:
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
+
 test:
   assemblies:
     - '**\bin\$(configuration)\*.test.dll'
 
 artifacts:
-  - path: src\VSSetup.PowerShell\bin\$(configuration)
+  - path: bin\$(configuration)\VSSetup.zip
     name: VSSetup
-    type: zip
 
   - path: src\VSSetup\bin\$(configuration)\*.nupkg
     name: package
@@ -49,6 +52,16 @@ deploy:
     api_key:
       secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
     artifact: package
+    skip_symbols: true
+    on:
+      branch: master
+      configuration: Release
+
+  - provider: NuGet
+    server: https://nuget.smbsrc.net/
+    api_key:
+      secure: WPxjuSouwbCdM6I771BfIbOk8gA883+l9RKUCfFknaUT1vYPmTpT2ABF9r+J0JgR
+    artifact: /.*\.symbols\.nupkg/
     on:
       branch: master
       configuration: Release
