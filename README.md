@@ -35,4 +35,13 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 
 To file issues or suggestions, please use the Issues page for this project on GitHub.
 
+## Status
+
+This project uses a Git flow model releasing from the `master` branch with development based on and stabilize in the `develop` branch.
+
+Branch  | Status
+------  | ------
+master  | [![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/master)
+develop | [![build status: develop](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/develop?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/develop)
+
   [samples]: https://aka.ms/setup/configuration/samples
