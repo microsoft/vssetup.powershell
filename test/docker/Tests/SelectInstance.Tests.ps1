@@ -52,7 +52,7 @@ Describe 'Select-VSSetupInstance' {
     Context 'Queries specified workloads' {
         $instances = Get-VSSetupInstance | Select-VSSetupInstance -Require 'Microsoft.VisualStudio.Workload.ManagedDesktop'
 
-        It 'Returns 2 insances' {
+        It 'Returns 2 instances' {
             $instances.Count | Should Be 2
         }
     }

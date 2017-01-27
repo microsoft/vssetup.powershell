@@ -17,8 +17,6 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     /// </summary>
     public class InstanceAdapter : PSPropertyAdapter
     {
-        private static readonly string ObjectTypeName = typeof(object).FullName;
-        private static readonly string StringTypeName = typeof(string).FullName;
         private static readonly string PSPathPropertyName = "PSPath";
         private static readonly string FileSystemProviderPrefix = @"Microsoft.PowerShell.Core\FileSystem::";
 
@@ -60,7 +58,10 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         public override string GetPropertyTypeName(PSAdaptedProperty adaptedProperty)
         {
             var property = adaptedProperty.Tag as InstanceProperty;
-            return property.TypeName ?? ObjectTypeName;
+            var type = property?.Type ?? typeof(object);
+
+            // TODO: If upgrading to newer PowerShell version use LanguagePrimitives.ConvertTypeNameToPSTypeName.
+            return type.FullName;
         }
 
         /// <inheritdoc/>
@@ -69,13 +70,23 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             var instance = adaptedProperty.BaseObject as Instance;
             if (instance != null)
             {
-                if (string.Equals(adaptedProperty.Name, PSPathPropertyName, StringComparison.OrdinalIgnoreCase))
+                var name = adaptedProperty.Name;
+                if (string.Equals(name, PSPathPropertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     return GetPSPath(instance);
                 }
 
+                object value = null;
+
                 var property = adaptedProperty.Tag as InstanceProperty;
-                return property?.Property?.GetValue(instance, null);
+                if (property?.Property != null)
+                {
+                    return property.Property.GetValue(instance, null);
+                }
+                else if (instance.AdditionalProperties.TryGetValue(name, out value))
+                {
+                    return value;
+                }
             }
 
             return null;
@@ -115,13 +126,19 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
         private IEnumerable<PSAdaptedProperty> GetProperties(Instance instance)
         {
-            yield return new PSAdaptedProperty("PSPath", new InstanceProperty { TypeName = StringTypeName });
+            yield return new PSAdaptedProperty("PSPath", new InstanceProperty { Type = typeof(string) });
 
             var properties = instance.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
             foreach (var property in properties)
             {
-                var tag = new InstanceProperty { TypeName = property.PropertyType.FullName, Property = property };
+                var tag = new InstanceProperty { Type = property.PropertyType, Property = property };
                 yield return new PSAdaptedProperty(property.Name, tag);
+            }
+
+            foreach (var keyValue in instance.AdditionalProperties)
+            {
+                var tag = new InstanceProperty { Type = keyValue.Value?.GetType() ?? typeof(object) };
+                yield return new PSAdaptedProperty(keyValue.Key, tag);
             }
         }
 
@@ -137,7 +154,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
         private class InstanceProperty
         {
-            public string TypeName { get; set; }
+            public Type Type { get; set; }
 
             public PropertyInfo Property { get; set; }
         }

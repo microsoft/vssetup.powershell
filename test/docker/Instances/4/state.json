@@ -1,4 +1,5 @@
 {
+    "channelId": "VisualStudio.15.Release/public.d15rel/15.0.26117.0",
     "installationName": "VisualStudio/public.d15rel/15.0.26117.0",
     "installationVersion": "15.0.26117.0",
     "installationPath": "C:\\BuildTools",
@@ -31,9 +32,9 @@
     ],
     "packages": [
         {
-			"id": "Microsoft.VisualStudio.Workload.MSBuildTools",
-			"version": "15.0.26117.0",
-			"type": "Workload"
+            "id": "Microsoft.VisualStudio.Workload.MSBuildTools",
+            "version": "15.0.26117.0",
+            "type": "Workload"
         },
         {
             "id": "Microsoft.VisualStudio.Product.BuildTools",
