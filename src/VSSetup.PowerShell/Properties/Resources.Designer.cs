@@ -77,5 +77,14 @@ namespace Microsoft.VisualStudio.Setup.Properties {
                 return ResourceManager.GetString("NoInstanceForPath_Args1", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The setup configuration provider is not registered. Assuming no registered instances..
+        /// </summary>
+        internal static string NotRegistered {
+            get {
+                return ResourceManager.GetString("NotRegistered", resourceCulture);
+            }
+        }
     }
 }

@@ -123,4 +123,7 @@
   <data name="NoInstanceForPath_Args1" xml:space="preserve">
     <value>No instance found for path "{0}".</value>
   </data>
+  <data name="NotRegistered" xml:space="preserve">
+    <value>The setup configuration provider is not registered. Assuming no registered instances.</value>
+  </data>
 </root>
