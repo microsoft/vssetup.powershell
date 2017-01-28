@@ -1,4 +1,5 @@
 {
+    "channelId": "VisualStudio.15.Release/public.d15rel/15.0.26117.0",
     "installationName": "VisualStudio/public.d15rel/15.0.26117.0",
     "installationVersion": "15.0.26117.0",
     "installationPath": "C:\\VS\\Professional",
@@ -34,19 +35,19 @@
     ],
     "packages": [
         {
-			"id": "Microsoft.VisualStudio.Workload.ManagedDesktop",
-			"version": "15.0.26117.0",
-			"type": "Workload"
+            "id": "Microsoft.VisualStudio.Workload.ManagedDesktop",
+            "version": "15.0.26117.0",
+            "type": "Workload"
         },
         {
-			"id": "Microsoft.VisualStudio.Workload.CoreEditor",
-			"version": "15.0.26117.0",
-			"type": "Workload"
+            "id": "Microsoft.VisualStudio.Workload.CoreEditor",
+            "version": "15.0.26117.0",
+            "type": "Workload"
         },
         {
-			"id": "Microsoft.VisualStudio.Branding.Professional",
-			"version": "15.0.26117.0",
-			"type": "Vsix"
+            "id": "Microsoft.VisualStudio.Branding.Professional",
+            "version": "15.0.26117.0",
+            "type": "Vsix"
         },
         {
             "id": "Microsoft.VisualStudio.Product.Professional",

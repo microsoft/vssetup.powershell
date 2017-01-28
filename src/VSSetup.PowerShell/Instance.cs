@@ -11,6 +11,7 @@ namespace Microsoft.VisualStudio.Setup
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.InteropServices;
     using Configuration;
 
@@ -19,6 +20,8 @@ namespace Microsoft.VisualStudio.Setup
     /// </summary>
     public class Instance
     {
+        private static readonly ISet<string> DeclaredProperties;
+
         private readonly string installationName;
         private readonly string installationPath;
         private readonly Version installationVersion;
@@ -29,6 +32,15 @@ namespace Microsoft.VisualStudio.Setup
         private readonly string productPath;
         private readonly PackageReference product;
         private readonly IList<PackageReference> packages;
+
+        static Instance()
+        {
+            var properties = typeof(Instance)
+                .GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
+                .Select(property => property.Name);
+
+            DeclaredProperties = new HashSet<string>(properties, StringComparer.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Instance"/> class.
@@ -104,6 +116,12 @@ namespace Microsoft.VisualStudio.Setup
             {
                 Packages = new ReadOnlyCollection<PackageReference>(packages);
             }
+
+            // Get all properties of the instance not explicitly declared.
+            var store = (ISetupPropertyStore)instance;
+            AdditionalProperties = store.GetNames()
+                .Where(name => !DeclaredProperties.Contains(name))
+                .ToDictionary(name => name.ToPascalCase(), name => store.GetValue(name), StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -160,6 +178,11 @@ namespace Microsoft.VisualStudio.Setup
         /// Gets a collection of <see cref="PackageReference"/> installed to the instance.
         /// </summary>
         public ReadOnlyCollection<PackageReference> Packages { get; }
+
+        /// <summary>
+        /// Gets additional properties not explicitly defined on this class.
+        /// </summary>
+        internal IDictionary<string, object> AdditionalProperties { get; }
 
         private static IEnumerable<PackageReference> GetPackages(ISetupInstance2 instance)
         {

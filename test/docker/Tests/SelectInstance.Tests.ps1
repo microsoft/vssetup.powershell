@@ -11,7 +11,7 @@ Describe 'Select-VSSetupInstance' {
     }
 
     Context 'Returns latest launchable VS' {
-        $instances = Get-VSSetupInstance | Select-VSSetupInstance -Latest
+        $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Latest)
 
         It 'Returns 1 instance' {
             $instances.Count | Should Be 1
@@ -24,7 +24,7 @@ Describe 'Select-VSSetupInstance' {
     }
 
     Context 'Returns latest VS' {
-        $instances = Get-VSSetupInstance -All | Select-VSSetupInstance -Latest
+        $instances = @(Get-VSSetupInstance -All | Select-VSSetupInstance -Latest)
 
         It 'Returns 1 instance' {
             $instances.Count | Should Be 1
@@ -37,7 +37,7 @@ Describe 'Select-VSSetupInstance' {
     }
 
     Context 'Supports other products' {
-        $instances = Get-VSSetupInstance | Select-VSSetupInstance -Product 'Microsoft.VisualStudio.Product.BuildTools'
+        $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product 'Microsoft.VisualStudio.Product.BuildTools')
 
         It 'Returns 1 instance' {
             $instances.Count | Should Be 1
@@ -52,7 +52,7 @@ Describe 'Select-VSSetupInstance' {
     Context 'Queries specified workloads' {
         $instances = Get-VSSetupInstance | Select-VSSetupInstance -Require 'Microsoft.VisualStudio.Workload.ManagedDesktop'
 
-        It 'Returns 2 insances' {
+        It 'Returns 2 instances' {
             $instances.Count | Should Be 2
         }
     }

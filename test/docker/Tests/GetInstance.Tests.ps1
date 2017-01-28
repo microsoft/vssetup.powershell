@@ -54,4 +54,17 @@ Describe 'Get-VSSetupInstance' {
             $instance.Description | Should Match '^Kostenlose'
         }
     }
+
+    Context 'Contains additional properties' {
+        [System.Globalization.CultureInfo]::CurrentUICulture = $en
+        $instance = Get-VSSetupInstance C:\VS\Community
+
+        It 'Contains "ChannelId"' {
+            $instance.ChannelId | Should Be 'VisualStudio.15.Release/public.d15rel/15.0.26116.0'
+        }
+
+        It 'Contains "EnginePath"' {
+            $instance.EnginePath | Should Be 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service'
+        }
+    }
 }

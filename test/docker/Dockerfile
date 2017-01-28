@@ -4,7 +4,7 @@
 # Require .NET Framework
 FROM microsoft/windowsservercore
 
-ENV API_VERSION="1.3.269-rc"
+ENV API_VERSION="1.4.174-rc"
 
 # Download and register current query APIs
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
@@ -20,10 +20,10 @@ RUN $ErrorActionPreference = 'Stop' ; \
     Install-PackageProvider -Name nuget -MinimumVersion 2.8.5.201 -Force ; \
     Install-Module -Name Pester -Scope CurrentUser -SkipPublisherCheck -Force
 
-# Copy test instance data and set up directories
-ADD ["Instances/", "C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances/"]
+# Set up test directories and instance data
 RUN $ErrorActionPreference = 'Stop' ; \
     New-Item -Path C:\VS\Community, C:\VS\Enterprise, C:\VS\Professional, C:\BuildTools -Type Directory | Out-Null
+ADD ["Instances/", "C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances/"]
 
 # Copy tests
 ADD ["Tests", "C:/Tests"]
