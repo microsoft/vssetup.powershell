@@ -4,10 +4,9 @@
 # Require .NET Framework
 FROM microsoft/windowsservercore
 
-ENV API_VERSION="1.4.174-rc"
-
 # Download and register current query APIs
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
+ENV API_VERSION="1.4.174-rc"
 RUN $ErrorActionPreference = 'Stop' ; \
     New-Item -Path C:\Downloads -Type Directory | Out-Null ; \
     Invoke-WebRequest -Uri "https://www.nuget.org/api/v2/package/Microsoft.VisualStudio.Setup.Configuration.Native/${env:API_VERSION}" -OutFile C:\Downloads\Microsoft.VisualStudio.Setup.Configuration.Native.zip ; \
@@ -19,13 +18,5 @@ RUN $ErrorActionPreference = 'Stop' ; \
 RUN $ErrorActionPreference = 'Stop' ; \
     Install-PackageProvider -Name nuget -MinimumVersion 2.8.5.201 -Force ; \
     Install-Module -Name Pester -Scope CurrentUser -SkipPublisherCheck -Force
-
-# Set up test directories and instance data
-RUN $ErrorActionPreference = 'Stop' ; \
-    New-Item -Path C:\VS\Community, C:\VS\Enterprise, C:\VS\Professional, C:\BuildTools -Type Directory | Out-Null
-ADD ["Instances/", "C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances/"]
-
-# Copy tests
-ADD ["Tests", "C:/Tests"]
 
 ENTRYPOINT ["powershell.exe", "-ExecutionPolicy", "Unrestricted"]

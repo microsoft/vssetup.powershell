@@ -38,9 +38,16 @@ goto :help
 if "%keep%"=="" set params=%params% --rm
 
 set outputPath=%solutionDir%src\VSSetup.PowerShell\bin\%configuration%
+set volumes=-v "%projectDir%Instances:C:\ProgramData\Microsoft\VisualStudio\Packages\_Instances"
+set volumes=%volumes% -v C:\VS\Community
+set volumes=%volumes% -v C:\VS\Professional
+set volumes=%volumes% -v C:\VS\Enterprise
+set volumes=%volumes% -v C:\BuildTools
+set volumes=%volumes% -v "%projectDir%Tests:C:\Tests"
+set volumes=%volumes% -v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup"
 
 @echo on
-docker run -it -v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup" %params% %name% %args%
+docker run -it %volumes%%params% %name% %args%
 @if errorlevel 1 exit /b %ERRORLEVEL%
 
 @echo off

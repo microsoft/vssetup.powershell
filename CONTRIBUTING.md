@@ -46,7 +46,7 @@ packages\xunit.runner.console.<version>\tools\xunit.runner.console test\VSSetup.
 It's also recommended that, if your machine supports it, you install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior.
 
 ```batch
-REM You only need to build once unless changing files under test\docker.
+REM You only need to build once unless updating the Dockerfile or files it copies.
 test\docker\build
 
 REM This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
