@@ -59,5 +59,17 @@
             "version": "15.0.26117.0",
             "type": "Product"
         }
-    ]
+    ],
+    "errors": {
+        "errorLogFilePath": "C:\\TEMP\\dd_setup_201601180315_errors.log",
+        "failedPackages": [
+            {
+                "id": "Microsoft.VisualStudio.Workload.Office",
+                "version": "15.0.26009.0",
+                "type": "Workload",
+                "logFilePath": "C:\\TEMP\\dd_setup_201601180315_003_Microsoft.VisualStudio.Workload.Office_errors.log",
+                "description": "Failed to install Microsoft.VisualStudio.Workload.Office"
+            }
+        ]
+    }
 }
