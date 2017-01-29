@@ -1,7 +1,7 @@
 {
     "channelId": "VisualStudio.15.Release/public.d15rel/15.0.26117.0",
     "installationName": "VisualStudio/public.d15rel/15.0.26117.0",
-    "installationVersion": "15.0.26117.0",
+    "installationVersion": "15.0.26117",
     "installationPath": "C:\\VS\\Professional",
     "installDate": "2017-01-18T03:30:00Z",
     "product": {
@@ -25,6 +25,9 @@
         "fileName": "Common7\\IDE\\devenv.exe"
     },
     "enginePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\resources\\app\\ServiceHub\\Services\\Microsoft.VisualStudio.Setup.Service",
+    "properties": {
+        "nickname": "Professional"
+    },
     "selectedPackages": [
         {
             "id": "Microsoft.VisualStudio.Product.Professional",

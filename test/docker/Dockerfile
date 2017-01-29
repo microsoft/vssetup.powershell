@@ -6,7 +6,7 @@ FROM microsoft/windowsservercore
 
 # Download and register current query APIs
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
-ENV API_VERSION="1.4.174-rc"
+ENV API_VERSION="1.5.125-rc"
 RUN $ErrorActionPreference = 'Stop' ; \
     New-Item -Path C:\Downloads -Type Directory | Out-Null ; \
     Invoke-WebRequest -Uri "https://www.nuget.org/api/v2/package/Microsoft.VisualStudio.Setup.Configuration.Native/${env:API_VERSION}" -OutFile C:\Downloads\Microsoft.VisualStudio.Setup.Configuration.Native.zip ; \

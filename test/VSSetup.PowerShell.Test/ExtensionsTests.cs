@@ -5,10 +5,26 @@
 
 namespace Microsoft.VisualStudio.Setup
 {
+    using System;
     using Xunit;
 
     public class ExtensionsTests
     {
+        public void Normalize_Null_Throws()
+        {
+            Assert.Throws<ArgumentNullException>("version", () => Extensions.Normalize(null));
+        }
+
+        [Theory]
+        [InlineData("1.2", "1.2.0.0")]
+        [InlineData("1.2.3", "1.2.3.0")]
+        [InlineData("1.2.3.4", "1.2.3.4")]
+        public void Normalize(string value, string expected)
+        {
+            var actual = Version.Parse(value).Normalize();
+            Assert.Equal(expected, actual.ToString());
+        }
+
         [Theory]
         [InlineData(null, null)]
         [InlineData("", "")]

@@ -32,6 +32,12 @@ Before you can build this project from the command line with MSBuild or within V
 
 Note again that to build the full solution in Visual Studio some optional software may be required.
 
+### Updating Packages
+
+Please note that the types in _Microsoft.VisualStudio.Setup.Configuration.Interop_ are embeddable and Visual Studio will use this setting by default for both the source and test projects. However, after updating the package reference in the test project you must disable "Embed Interop Types" and enable "Copy Local" for the _Microsoft.VisualStudio.Setup.Configuration.Interop_ assembly or any tests that mock the interfaces will fail.
+
+This is because only types and methods referenced are included, and any methods prior to referenced methods in VTBL order are stubbed and will not match the proper method names, thus failing any tests with mocks of embedded interfaces. By referencing the assembly locally instead of embedding, all types are left intact and mocks will correctly match all names despite those types being embedded in the source project, since COM-imported type names are equivalent based on their GUIDs.
+
 ## Testing
 
 All available tests are discovered after a complete build in Test Explorer within Visual Studio.
