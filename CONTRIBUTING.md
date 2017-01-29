@@ -59,7 +59,18 @@ REM This will automatically map build output. Defaults to Debug configuration. P
 test\docker\test
 ```
 
-You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing.
+### Debugging
+
+You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing. If no other commands are passed when starting the container, the Visual Studio Remote Debugger will launch by default. Remote debugging services are discoverable on your private network.
+
+1. Click *Debug -> Attach to Process*
+2. Change *Transport* to "Remote (no authentication)"
+3. Click *Find*
+4. Click *Select* on the container (host name will be the container name)
+5. Select "powershell" under *Available Processes*
+6. Click *Attach*
+
+If you know the host name or IP address (depending on your network configuration for the container), you can type it into the *Qualifier* directory along with port 4020, e.g. "172.22.0.1:4020".
 
 ## Pull Requests
 
