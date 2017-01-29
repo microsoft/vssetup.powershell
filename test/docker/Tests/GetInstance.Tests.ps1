@@ -12,6 +12,10 @@ Describe 'Get-VSSetupInstance' {
         It 'Returns 3 instances' {
             $instances.Count | Should Be 3
         }
+
+        It 'Returns launchable instances' {
+            $instances | ForEach-Object { $_.IsLaunchable | Should Be $true }
+        }
     }
 
     Context 'All instances' {
@@ -52,6 +56,14 @@ Describe 'Get-VSSetupInstance' {
             $instance.InstanceId | Should Be 1
             $instance.DisplayName | Should Be 'Visual Studio Community 2017'
             $instance.Description | Should Match '^Kostenlose'
+        }
+
+        It 'Returns normalized version' {
+            [System.Globalization.CultureInfo]::CurrentUICulture = $en
+            $instance = Get-VSSetupInstance 'C:\VS\Community'
+
+            $instance.InstanceId | Should Be 1
+            $instance.InstallationVersion | Should Be '15.0.26116.0'
         }
     }
 

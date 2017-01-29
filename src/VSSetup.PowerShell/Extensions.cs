@@ -5,6 +5,7 @@
 
 namespace Microsoft.VisualStudio.Setup
 {
+    using System;
     using System.Text;
 
     /// <summary>
@@ -12,6 +13,21 @@ namespace Microsoft.VisualStudio.Setup
     /// </summary>
     internal static class Extensions
     {
+        /// <summary>
+        /// Returns a <see cref="Version"/> without negative fields.
+        /// </summary>
+        /// <param name="version">The <see cref="Version"/> to normalize.</param>
+        /// <returns>A <see cref="Version"/> without negative fields.</returns>
+        public static Version Normalize(this Version version)
+        {
+            Validate.NotNull(version, nameof(version));
+
+            int build = version.Build > 0 ? version.Build : 0;
+            int revision = version.Revision > 0 ? version.Revision : 0;
+
+            return new Version(version.Major, version.Minor, build, revision);
+        }
+
         /// <summary>
         /// Converts a string to PascalCase.
         /// </summary>

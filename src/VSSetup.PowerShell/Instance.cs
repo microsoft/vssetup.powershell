@@ -32,6 +32,9 @@ namespace Microsoft.VisualStudio.Setup
         private readonly string productPath;
         private readonly PackageReference product;
         private readonly IList<PackageReference> packages;
+        private readonly string enginePath;
+        private readonly bool isComplete;
+        private readonly bool isLaunchable;
 
         static Instance()
         {
@@ -63,7 +66,7 @@ namespace Microsoft.VisualStudio.Setup
                 var versionString = instance.GetInstallationVersion();
                 if (Version.TryParse(versionString, out version))
                 {
-                    return version;
+                    return version.Normalize();
                 }
 
                 return null;
@@ -116,6 +119,10 @@ namespace Microsoft.VisualStudio.Setup
             {
                 Packages = new ReadOnlyCollection<PackageReference>(packages);
             }
+
+            TrySet(ref enginePath, nameof(EnginePath), instance.GetEnginePath);
+            TrySet(ref isComplete, nameof(IsComplete), instance.IsComplete);
+            TrySet(ref isLaunchable, nameof(IsLaunchable), instance.IsLaunchable);
 
             // Get all properties of the instance not explicitly declared.
             var store = (ISetupPropertyStore)instance;
@@ -178,6 +185,21 @@ namespace Microsoft.VisualStudio.Setup
         /// Gets a collection of <see cref="PackageReference"/> installed to the instance.
         /// </summary>
         public ReadOnlyCollection<PackageReference> Packages { get; }
+
+        /// <summary>
+        /// Gets the path to the engine that installed the instance.
+        /// </summary>
+        public string EnginePath => enginePath;
+
+        /// <summary>
+        /// Gets a value indicating whether the instance is complete.
+        /// </summary>
+        public bool IsComplete => isComplete;
+
+        /// <summary>
+        /// Gets a value indicating whether the instance is launchable (e.g. may have errors but other features work).
+        /// </summary>
+        public bool IsLaunchable => isLaunchable;
 
         /// <summary>
         /// Gets additional properties not explicitly defined on this class.
