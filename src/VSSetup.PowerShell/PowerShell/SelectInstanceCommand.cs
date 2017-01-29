@@ -9,9 +9,8 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
-    using System.Runtime.InteropServices;
+    using System.Text.RegularExpressions;
     using Configuration;
-    using Properties;
 
     /// <summary>
     /// The Get-VSSetupInstance command.
@@ -20,8 +19,20 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     [OutputType(typeof(Instance))]
     public class SelectInstanceCommand : Cmdlet
     {
+        /// <summary>
+        /// A regular expression that matches a version range.
+        /// </summary>
+        internal const string VersionRangePattern = @"^((\d+(\.\d+){1,3})|([\[\(]\s*(\d+(\.\d+){1,3})?\s*(,\s*(\d+(\.\d+){1,3})?)?\s*[\]\)]))$";
+
+        /// <summary>
+        /// Regular expression options for the version range.
+        /// </summary>
+        internal const RegexOptions VersionRangeOptions = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline;
+
         private ISetupHelper helper = null;
         private Instance latestInstance = null;
+        private ulong minVersion = 0;
+        private ulong maxVersion = 0;
 
         /// <summary>
         /// Gets or sets the Instance parameter.
@@ -49,6 +60,13 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         public string[] Require { get; set; }
 
         /// <summary>
+        /// Gets or sets the Version parameter.
+        /// </summary>
+        [Parameter]
+        [ValidatePattern(VersionRangePattern, Options = VersionRangeOptions)]
+        public string Version { get; set; }
+
+        /// <summary>
         /// Gets or sets the Latest parameter.
         /// </summary>
         [Parameter]
@@ -57,7 +75,16 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         protected override void BeginProcessing()
         {
-            helper = (ISetupHelper)new SetupConfiguration();
+            if (!string.IsNullOrEmpty(Version))
+            {
+                var query = QueryFactory.Create();
+                if (query != null)
+                {
+                    helper = (ISetupHelper)new SetupConfiguration();
+
+                    helper.ParseVersionRange(Version, out minVersion, out maxVersion);
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -80,6 +107,16 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                 instances = from instance in instances
                             let instancePackages = instance?.Packages
                             where instancePackages != null && instancePackages.ContainsAll(package => package.Id, Require, StringComparer.OrdinalIgnoreCase)
+                            select instance;
+            }
+
+            if (helper != null)
+            {
+                instances = from instance in instances
+                            let instanceVersion = instance?.InstallationVersion?.ToString()
+                            where !string.IsNullOrEmpty(instanceVersion)
+                            let version = helper.ParseVersion(instanceVersion)
+                            where minVersion <= version && version <= maxVersion
                             select instance;
             }
 

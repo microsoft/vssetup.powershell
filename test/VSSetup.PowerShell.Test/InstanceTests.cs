@@ -14,6 +14,15 @@ namespace Microsoft.VisualStudio.Setup
 
     public class InstanceTests
     {
+        private readonly Mock<ISetupInstance2> instance;
+        private readonly Mock<ISetupPropertyStore> store;
+
+        public InstanceTests()
+        {
+            instance = new Mock<ISetupInstance2>();
+            store = instance.As<ISetupPropertyStore>();
+        }
+
         [Fact]
         public void New_Instance_Null_Throws()
         {
@@ -23,7 +32,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Missing_InstanceId_Throws()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Throws(new COMException("Not found", NativeMethods.E_NOTFOUND));
 
             var ex = Assert.Throws<COMException>(() => new Instance(instance.Object));
@@ -33,7 +41,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Missing_InstallationName()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetInstallationName()).Throws(new COMException("Not found", NativeMethods.E_NOTFOUND));
 
@@ -44,7 +51,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Null_InstallationVersion()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetInstallationVersion()).Returns<string>(null);
 
@@ -55,7 +61,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Invalid_InstallationVersion()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetInstallationVersion()).Returns("invalid");
 
@@ -66,7 +71,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_InstallationVersion()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetInstallationVersion()).Returns("1.2.3.4");
 
@@ -77,7 +81,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Product_Null()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
 
             var sut = new Instance(instance.Object);
@@ -89,7 +92,6 @@ namespace Microsoft.VisualStudio.Setup
         {
             var product = Mock.Of<ISetupPackageReference>(x => x.GetId() == "product");
 
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetProduct()).Returns(product);
 
@@ -101,7 +103,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Packages_Null()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
 
             var sut = new Instance(instance.Object);
@@ -111,7 +112,6 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void New_Packages_Empty()
         {
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetPackages()).Returns(Enumerable.Empty<ISetupPackageReference>().ToArray());
 
@@ -128,7 +128,6 @@ namespace Microsoft.VisualStudio.Setup
                 Mock.Of<ISetupPackageReference>(x => x.GetId() == "b"),
             };
 
-            var instance = new Mock<ISetupInstance2>();
             instance.Setup(x => x.GetInstanceId()).Returns("test");
             instance.Setup(x => x.GetPackages()).Returns(references);
 
@@ -137,6 +136,21 @@ namespace Microsoft.VisualStudio.Setup
                 sut.Packages,
                 x => Assert.Equal("a", x.Id),
                 x => Assert.Equal("b", x.Id));
+        }
+
+        [Fact]
+        public void New_Copies_AdditionalProperties()
+        {
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            store.Setup(x => x.GetNames()).Returns(new[] { "a", "b" });
+            store.Setup(x => x.GetValue("a")).Returns(1);
+            store.Setup(x => x.GetValue("b")).Returns(2);
+
+            var sut = new Instance(instance.Object);
+            Assert.Equal(1, sut.AdditionalProperties["A"]);
+            Assert.Equal(1, sut.AdditionalProperties["a"]);
+            Assert.Equal(2, sut.AdditionalProperties["B"]);
+            Assert.Equal(2, sut.AdditionalProperties["b"]);
         }
     }
 }

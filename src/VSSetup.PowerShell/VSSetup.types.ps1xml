@@ -29,6 +29,9 @@
         </Members>
       </MemberSet>
     </Members>
+    <TypeAdapter>
+      <TypeName>Microsoft.VisualStudio.Setup.PowerShell.InstanceAdapter</TypeName>
+    </TypeAdapter>
   </Type>
   <Type>
     <Name>Microsoft.VisualStudio.Setup.PackageReference</Name>

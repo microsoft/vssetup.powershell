@@ -15,6 +15,8 @@ Some projects require optional software to open or otherwise use in Visual Studi
 
 ## Coding
 
+This project uses a Git flow model releasing from the `master` branch with development based on and stabilize in the `develop` branch. You can view current build status in the [README](README.md) document.
+
 These cmdlets use the setup configuration API. [Documentation][docs] is available on MSDN, as well as [samples][samples] of how the APIs can be used.
 
 Code analysis and style cop rules are defined for this solution, but are currently not enforced during build for performance reasons or treated as errors. This may change in the future. Please resolve any build warnings in the code editor or **Error List** window.
@@ -30,16 +32,34 @@ Before you can build this project from the command line with MSBuild or within V
 
 Note again that to build the full solution in Visual Studio some optional software may be required.
 
+### Updating Packages
+
+Please note that the types in _Microsoft.VisualStudio.Setup.Configuration.Interop_ are embeddable and Visual Studio will use this setting by default for both the source and test projects. However, after updating the package reference in the test project you must disable "Embed Interop Types" and enable "Copy Local" for the _Microsoft.VisualStudio.Setup.Configuration.Interop_ assembly or any tests that mock the interfaces will fail.
+
+This is because only types and methods referenced are included, and any methods prior to referenced methods in VTBL order are stubbed and will not match the proper method names, thus failing any tests with mocks of embedded interfaces. By referencing the assembly locally instead of embedding, all types are left intact and mocks will correctly match all names despite those types being embedded in the source project, since COM-imported type names are equivalent based on their GUIDs.
+
 ## Testing
 
 All available tests are discovered after a complete build in Test Explorer within Visual Studio.
 
 On the command line, you can run the following commands from the solution directory. Replace `<version>` with whatever version was downloaded.
 
-```
+```batch
 nuget install xunit.runner.console -outputdirectory packages
 packages\xunit.runner.console.<version>\tools\xunit.runner.console test\VSSetup.PowerShell.Test\bin\Debug\Microsoft.VisualStudio.Setup.PowerShell.Test.dll
 ```
+
+It's also recommended that, if your machine supports it, you install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior.
+
+```batch
+REM You only need to build once unless updating the Dockerfile or files it copies.
+test\docker\build
+
+REM This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
+test\docker\test
+```
+
+You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing.
 
 ## Pull Requests
 
@@ -50,6 +70,7 @@ We welcome pull requests for both bug fixes and new features that solve a common
 
 Thank you for your contributions!
 
+  [docker]: https://www.docker.com/products/overview
   [samples]: https://aka.ms/setup/configuration/samples
   [docs]: https://aka.ms/setup/configuration/docs
   [interop]: https://aka.ms/setup/configuration/interop
