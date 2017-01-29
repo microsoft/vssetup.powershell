@@ -32,6 +32,7 @@ namespace Microsoft.VisualStudio.Setup
         private readonly string productPath;
         private readonly PackageReference product;
         private readonly IList<PackageReference> packages;
+        private readonly IDictionary<string, object> properties;
         private readonly string enginePath;
         private readonly bool isComplete;
         private readonly bool isLaunchable;
@@ -120,6 +121,23 @@ namespace Microsoft.VisualStudio.Setup
                 Packages = new ReadOnlyCollection<PackageReference>(packages);
             }
 
+            TrySet(ref properties, nameof(Properties), () =>
+            {
+                var properties = instance.GetProperties();
+                return properties?.GetNames()
+                    .ToDictionary(name => name.ToPascalCase(), name => properties.GetValue(name), StringComparer.OrdinalIgnoreCase);
+            });
+
+            if (properties != null)
+            {
+                Properties = new ReadOnlyDictionary<string, object>(properties);
+            }
+            else
+            {
+                // While accessing properties on a null object succeeds in PowerShell, accessing the indexer does not.
+                Properties = ReadOnlyDictionary<string, object>.Empty;
+            }
+
             TrySet(ref enginePath, nameof(EnginePath), instance.GetEnginePath);
             TrySet(ref isComplete, nameof(IsComplete), instance.IsComplete);
             TrySet(ref isLaunchable, nameof(IsLaunchable), instance.IsLaunchable);
@@ -185,6 +203,11 @@ namespace Microsoft.VisualStudio.Setup
         /// Gets a collection of <see cref="PackageReference"/> installed to the instance.
         /// </summary>
         public ReadOnlyCollection<PackageReference> Packages { get; }
+
+        /// <summary>
+        /// Gets custom properties defined for the instance.
+        /// </summary>
+        public IDictionary<string, object> Properties { get; }
 
         /// <summary>
         /// Gets the path to the engine that installed the instance.

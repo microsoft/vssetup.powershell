@@ -84,6 +84,7 @@
     <Compile Include="PowerShell\ExtensionsTests.cs" />
     <Compile Include="PowerShell\SelectInstanceCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyDictionaryTests.cs" />
     <Compile Include="ValidateTests.cs" />
   </ItemGroup>
   <ItemGroup>

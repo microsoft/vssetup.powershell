@@ -25,6 +25,9 @@
         "fileName": "Common7\\IDE\\devenv.exe"
     },
     "enginePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\resources\\app\\ServiceHub\\Services\\Microsoft.VisualStudio.Setup.Service",
+    "properties": {
+        "nickname": "Professional"
+    },
     "selectedPackages": [
         {
             "id": "Microsoft.VisualStudio.Product.Professional",

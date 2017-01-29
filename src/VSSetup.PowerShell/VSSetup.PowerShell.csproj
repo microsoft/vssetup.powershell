@@ -63,6 +63,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReadOnlyDictionary.cs" />
     <Compile Include="Validate.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,6 @@ namespace Microsoft.VisualStudio.Setup
         {
             var actual = Version.Parse(value).Normalize();
             Assert.Equal(expected, actual.ToString());
-
         }
 
         [Theory]
