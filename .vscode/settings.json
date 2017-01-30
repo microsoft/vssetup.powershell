@@ -1,0 +1,26 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+    "files.associations": {
+        "*.ps1xml": "xml",
+        "*.psd1": "powershell"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.vs": true
+    },
+    "cSpell.language": "en",
+    "cSpell.enabledLanguageIds": [
+        "csharp",
+        "json",
+        "markdown",
+        "plaintext",
+        "powershell",
+        "text",
+        "yml"
+    ],
+    "cSpell.words": [
+        "VSIX"
+    ]
+}

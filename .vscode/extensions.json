@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "PeterJausovec.vscode-docker",
+        "ms-vscode.csharp",
+        "ms-vscode.PowerShell",
+        "streetsidesoftware.code-spell-checker"
+    ]
+}
