@@ -16,7 +16,7 @@ To install for all users, pass `AllUsers` instead of `CurrentUser`, or just leav
 You can also download the ZIP package from the [Releases][releases] page on this project site and extract to a directory named _VSSetup_ under a directory in your `$env:PSMODULEPATH`.
 
 ```powershell
-Expand-Archive VSSetup.zip "${env:USERPROFILE}\Documents\WindowsPowerShell\Modules\VSSetup"
+Expand-Archive VSSetup.zip "$([Environment]::GetFolderPath("MyDocuments"))\WindowsPowerShell\Modules\VSSetup"
 ```
 
 ## Using
