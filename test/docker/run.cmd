@@ -75,12 +75,13 @@ echo.
 echo %usage%
 echo.
 echo Options:
-echo -name          Image name. Defaults to vssetup/test.
-echo -configuration The build configuration to map. Defaults to Debug.
-echo -detach        Detach from the container and show the ID.
-echo -network       External network name. Defaults to discovered transparent network.
-echo -keep          Do not delete the container after exiting.
-echo -?             Displays this help message.
+echo -name value           Image name. Defaults to vssetup/test.
+echo -configuration value  The build configuration to map. Defaults to Debug.
+echo -detach               Detach from the container and show the ID.
+echo -on value             Run command on specified container ID.
+echo -network value        External network name. Defaults to discovered transparent network.
+echo -keep                 Do not delete the container after exiting.
+echo -?                    Displays this help message.
 echo.
 if "%noargs%"=="" (
 echo Arguments:
