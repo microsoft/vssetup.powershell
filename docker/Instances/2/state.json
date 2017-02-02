@@ -73,6 +73,13 @@
                 "logFilePath": "C:\\TEMP\\dd_setup_201601180315_003_Microsoft.VisualStudio.Workload.Office_errors.log",
                 "description": "Failed to install Microsoft.VisualStudio.Workload.Office"
             }
+        ],
+        "skippedPackages": [
+            {
+                "id": "Microsoft.VisualStudio.Component.Sharepoint.Tools",
+                "version": "15.0.260009.0",
+                "type": "Component"
+            }
         ]
     }
 }

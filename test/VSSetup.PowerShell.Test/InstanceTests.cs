@@ -106,7 +106,7 @@ namespace Microsoft.VisualStudio.Setup
             instance.Setup(x => x.GetInstanceId()).Returns("test");
 
             var sut = new Instance(instance.Object);
-            Assert.Null(sut.Packages);
+            Assert.Empty(sut.Packages);
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Microsoft.VisualStudio.Setup
             instance.Setup(x => x.GetPackages()).Returns(Enumerable.Empty<ISetupPackageReference>().ToArray());
 
             var sut = new Instance(instance.Object);
-            Assert.Null(sut.Packages);
+            Assert.Empty(sut.Packages);
         }
 
         [Fact]
@@ -151,6 +151,64 @@ namespace Microsoft.VisualStudio.Setup
             Assert.Equal(1, sut.AdditionalProperties["a"]);
             Assert.Equal(2, sut.AdditionalProperties["B"]);
             Assert.Equal(2, sut.AdditionalProperties["b"]);
+        }
+
+        [Fact]
+        public void New_No_Errors()
+        {
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+
+            var sut = new Instance(instance.Object);
+
+            Assert.Null(sut.Errors);
+        }
+
+        [Fact]
+        public void New_FailedPackages()
+        {
+            var a = new Mock<ISetupFailedPackageReference>();
+            a.As<ISetupPackageReference>().Setup(x => x.GetId()).Returns("a");
+
+            var b = new Mock<ISetupFailedPackageReference>();
+            b.As<ISetupPackageReference>().Setup(x => x.GetId()).Returns("b");
+
+            var errors = new Mock<ISetupErrorState>();
+            errors.Setup(x => x.GetFailedPackages()).Returns(new[] { a.Object, b.Object });
+
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            instance.Setup(x => x.GetErrors()).Returns(errors.Object);
+
+            var sut = new Instance(instance.Object);
+
+            Assert.NotNull(sut.Errors);
+            Assert.Collection(
+                sut.Errors.FailedPackages,
+                x => Assert.Equal("a", x.Id),
+                x => Assert.Equal("b", x.Id));
+        }
+
+        [Fact]
+        public void New_SkippedPackages()
+        {
+            var skippedPackages = new[]
+            {
+                Mock.Of<ISetupPackageReference>(x => x.GetId() == "a"),
+                Mock.Of<ISetupPackageReference>(x => x.GetId() == "b"),
+            };
+
+            var errors = new Mock<ISetupErrorState>();
+            errors.Setup(x => x.GetSkippedPackages()).Returns(skippedPackages);
+
+            instance.Setup(x => x.GetInstanceId()).Returns("test");
+            instance.Setup(x => x.GetErrors()).Returns(errors.Object);
+
+            var sut = new Instance(instance.Object);
+
+            Assert.NotNull(sut.Errors);
+            Assert.Collection(
+                sut.Errors.SkippedPackages,
+                x => Assert.Equal("a", x.Id),
+                x => Assert.Equal("b", x.Id));
         }
     }
 }

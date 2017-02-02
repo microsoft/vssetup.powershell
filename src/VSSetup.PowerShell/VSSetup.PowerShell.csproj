@@ -47,10 +47,13 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Errors.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FailedPackageReference.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PackageReference.cs" />
+    <Compile Include="PackageReferenceFactory.cs" />
     <Compile Include="QueryFactory.cs" />
     <Compile Include="PowerShell\Extensions.cs" />
     <Compile Include="PowerShell\GetInstanceCommand.cs" />
@@ -64,6 +67,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReadOnlyDictionary.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="Validate.cs" />
   </ItemGroup>
   <ItemGroup>

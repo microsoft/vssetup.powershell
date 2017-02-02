@@ -62,6 +62,13 @@ Describe 'Get-VSSetupInstance' {
             $instance.InstanceId | Should Be 1
             $instance.InstallationVersion | Should Be '15.0.26116.0'
         }
+
+        It 'Does not contain errors' {
+            $instance = Get-VSSetupInstance 'C:\VS\Community'
+
+            $instance.State  -band 'NoErrors' | Should Be 'NoErrors'
+            $instance.Errors | Should Be $null
+        }
     }
 
     Context 'Contains custom properties' {
@@ -84,6 +91,25 @@ Describe 'Get-VSSetupInstance' {
             $instance = Get-VSSetupInstance C:\BuildTools
 
             $instance.Properties.Count | Should Be 0
+        }
+    }
+
+    Context 'Contains errors' {
+        $instance = Get-VSSetupInstance C:\VS\Enterprise
+
+        It 'Contains errors' {
+            $instance.State -band 'NoErrors' | Should Be 0
+            $instance.Errors | Should Not Be $null
+        }
+
+        It 'Contains failed packages' {
+            $instance.Errors.FailedPackages.Count | Should Be 1
+            $instance.Errors.FailedPackages[0].Id | Should Be 'Microsoft.VisualStudio.Workload.Office'
+        }
+
+        It 'Contains skipped packages' {
+            $instance.Errors.SkippedPackages.Count | Should Be 1
+            $instance.Errors.SkippedPackages[0].Id | Should Be 'Microsoft.VisualStudio.Component.Sharepoint.Tools'
         }
     }
 }

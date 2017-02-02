@@ -78,13 +78,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorsTests.cs" />
     <Compile Include="ExtensionsTests.cs" />
+    <Compile Include="FailedPackageReferenceTests.cs" />
     <Compile Include="InstanceTests.cs" />
+    <Compile Include="PackageReferenceFactoryTests.cs" />
     <Compile Include="PackageReferenceTests.cs" />
     <Compile Include="PowerShell\ExtensionsTests.cs" />
     <Compile Include="PowerShell\SelectInstanceCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyDictionaryTests.cs" />
+    <Compile Include="UtilitiesTests.cs" />
     <Compile Include="ValidateTests.cs" />
   </ItemGroup>
   <ItemGroup>
