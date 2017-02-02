@@ -53,19 +53,19 @@ It's also recommended that, if your machine supports it, you install [Docker for
 
 ```batch
 REM You only need to build once unless updating the Dockerfile or files it copies.
-test\docker\build
+docker\build
 
 REM This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
-test\docker\test
+docker\test
 ```
 
-For a faster development process, you can run `test\docker\run -detach`, copy the container ID printed to the window, then subsequently run `test\docker\test -on <container id>` replacing `<container id>` with the container ID you copied previously. You can make changes to the test data and even rebuild the module and run this command again as frequently as you need. This is especially handy for quick turn around when debugging and fixing a problem.
+For a faster development process, you can run `docker\run -detach`, copy the container ID printed to the window, then subsequently run `docker\test -on <container id>` replacing `<container id>` with the container ID you copied previously. You can make changes to the test data and even rebuild the module and run this command again as frequently as you need. This is especially handy for quick turn around when debugging and fixing a problem.
 
 To stop the container, run `docker stop <container id>`. If you did not pass `-keep` when you started the container it will be removed automatically.
 
 ### Debugging
 
-You can also run `test\docker\run.cmd` to start an interactive shell for exploratory testing. If no other commands are passed when starting the container, the Visual Studio Remote Debugger will launch by default. Remote debugging services are discoverable on your private network.
+You can also run `docker\run.cmd` to start an interactive shell for exploratory testing. If no other commands are passed when starting the container, the Visual Studio Remote Debugger will launch by default. Remote debugging services are discoverable on your private network.
 
 1. Click *Debug -> Attach to Process*
 2. Change *Transport* to "Remote (no authentication)"

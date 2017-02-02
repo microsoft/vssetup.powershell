@@ -8,7 +8,7 @@ setlocal
 if "%script%"=="" set script=%~nx0
 
 set projectDir=%~dp0
-set solutionDir=%projectDir:~0,-12%
+set solutionDir=%projectDir:~0,-7%
 
 set configuration=Debug
 set name=vssetup/test
