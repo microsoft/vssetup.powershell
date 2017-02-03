@@ -6,8 +6,6 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
     using Configuration;
 
     /// <summary>
@@ -34,7 +32,7 @@ namespace Microsoft.VisualStudio.Setup
             // The package reference ID is required, but then try to set other properties to release the COM object and its resources ASAP.
             Id = reference.GetId();
 
-            TrySet(ref version, nameof(Version), () =>
+            Utilities.TrySet(ref version, nameof(Version), () =>
             {
                 Version version;
 
@@ -47,11 +45,11 @@ namespace Microsoft.VisualStudio.Setup
                 return null;
             });
 
-            TrySet(ref chip, nameof(Chip), reference.GetChip);
-            TrySet(ref branch, nameof(Branch), reference.GetBranch);
-            TrySet(ref type, nameof(Type), reference.GetType);
-            TrySet(ref isExtension, nameof(IsExtension), reference.GetIsExtension);
-            TrySet(ref uniqueId, nameof(UniqueId), reference.GetUniqueId);
+            Utilities.TrySet(ref chip, nameof(Chip), reference.GetChip);
+            Utilities.TrySet(ref branch, nameof(Branch), reference.GetBranch);
+            Utilities.TrySet(ref type, nameof(Type), reference.GetType);
+            Utilities.TrySet(ref isExtension, nameof(IsExtension), reference.GetIsExtension);
+            Utilities.TrySet(ref uniqueId, nameof(UniqueId), reference.GetUniqueId);
         }
 
         /// <summary>
@@ -96,18 +94,6 @@ namespace Microsoft.VisualStudio.Setup
         public override string ToString()
         {
             return uniqueId ?? base.ToString();
-        }
-
-        private void TrySet<T>(ref T property, string propertyName, Func<T> action)
-        {
-            try
-            {
-                property = action.Invoke();
-            }
-            catch (COMException ex) when (ex.ErrorCode == NativeMethods.E_NOTFOUND)
-            {
-                Trace.WriteLine($@"Instance: property ""{propertyName}"" not found on package reference ""{Id}"".");
-            }
         }
     }
 }
