@@ -8,10 +8,11 @@ setlocal
 if "%script%"=="" set script=%~nx0
 
 set projectDir=%~dp0
-set solutionDir=%projectDir:~0,-12%
+set solutionDir=%projectDir:~0,-7%
 
 set configuration=Debug
 set name=vssetup/test
+set mode=-it
 
 :parse
 if "%1"=="" goto :parse_end
@@ -20,6 +21,10 @@ if /i "%1"=="-name" set name=%2& shift& shift& goto :parse
 if /i "%1"=="/name" set name=%2& shift& shift& goto :parse
 if /i "%1"=="-configuration" set configuration=%2& shift& shift& goto :parse
 if /i "%1"=="/configuration" set configuration=%2& shift& shift& goto :parse
+if /i "%1"=="-detach" set mode=-d& shift& goto :parse
+if /i "%1"=="/detach" set mode=-d& shift& goto :parse
+if /i "%1"=="-on" set id=%2& shift& shift& goto :parse
+if /i "%1"=="/on" set id=%2& shift& shift& goto :parse
 if /i "%1"=="-network" set params=%params% --network "%2"& shift& shift& goto :parse
 if /i "%1"=="/network" set params=%params% --network "%2"& shift& shift& goto :parse
 if /i "%1"=="-keep" set keep=1& shift& goto :parse
@@ -38,19 +43,26 @@ goto :help
 if "%keep%"=="" set params=%params% --rm
 
 set outputPath=%solutionDir%src\VSSetup.PowerShell\bin\%configuration%
-set volumes=-v "%projectDir%Instances:C:\ProgramData\Microsoft\VisualStudio\Packages\_Instances"
+set volumes=-v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup:ro"
+set volumes=%volumes% -v "%projectDir%Instances:C:\ProgramData\Microsoft\VisualStudio\Packages\_Instances:ro"
 set volumes=%volumes% -v C:\VS\Community
 set volumes=%volumes% -v C:\VS\Professional
 set volumes=%volumes% -v C:\VS\Enterprise
 set volumes=%volumes% -v C:\BuildTools
 set volumes=%volumes% -v "%projectDir%Tests:C:\Tests"
-set volumes=%volumes% -v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup"
 
-@echo on
-docker run -it %volumes%%params% %name% %args%
+if "%id%"=="" (
+    REM Uses the ENTRYPOINT declaration in the Dockerfile
+    set cmd=docker run %mode% %volumes%%params% %name% %args%
+) else (
+    REM Keep in sync with the ENTRYPOINT in the Dockerfile
+    set cmd=docker exec %mode% %id% powershell.exe -ExecutionPolicy Unrestricted %args%
+)
+
+echo %cmd%
+call %cmd%
 @if errorlevel 1 exit /b %ERRORLEVEL%
 
-@echo off
 echo.
 goto :EOF
 
@@ -63,11 +75,13 @@ echo.
 echo %usage%
 echo.
 echo Options:
-echo -name          Image name. Defaults to vssetup/test.
-echo -configuration The build configuration to map. Defaults to Debug.
-echo -network       External network name. Defaults to discovered transparent network.
-echo -keep          Do not delete the container after exiting.
-echo -?             Displays this help message.
+echo -name value           Image name. Defaults to vssetup/test.
+echo -configuration value  The build configuration to map. Defaults to Debug.
+echo -detach               Detach from the container and show the ID.
+echo -on value             Run command on specified container ID.
+echo -network value        External network name. Defaults to discovered transparent network.
+echo -keep                 Do not delete the container after exiting.
+echo -?                    Displays this help message.
 echo.
 if "%noargs%"=="" (
 echo Arguments:

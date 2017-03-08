@@ -12,7 +12,6 @@ namespace Microsoft.VisualStudio.Setup
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.InteropServices;
     using Configuration;
 
     /// <summary>
@@ -58,75 +57,101 @@ namespace Microsoft.VisualStudio.Setup
             // The instance ID is required, but then try to set other properties to release the COM object and its resources ASAP.
             InstanceId = instance.GetInstanceId();
 
-            TrySet(ref installationName, nameof(InstallationName), instance.GetInstallationName);
-            TrySet(ref installationPath, nameof(InstallationPath), instance.GetInstallationPath);
-            TrySet(ref installationVersion, nameof(InstallationVersion), () =>
-            {
-                Version version;
-
-                var versionString = instance.GetInstallationVersion();
-                if (Version.TryParse(versionString, out version))
+            Utilities.TrySet(ref installationName, nameof(InstallationName), instance.GetInstallationName, OnError);
+            Utilities.TrySet(ref installationPath, nameof(InstallationPath), instance.GetInstallationPath, OnError);
+            Utilities.TrySet(
+                ref installationVersion,
+                nameof(InstallationVersion),
+                () =>
                 {
-                    return version.Normalize();
-                }
+                    Version version;
 
-                return null;
-            });
+                    var versionString = instance.GetInstallationVersion();
+                    if (Version.TryParse(versionString, out version))
+                    {
+                        return version.Normalize();
+                    }
 
-            TrySet(ref installDate, nameof(InstallDate), () =>
-            {
-                var ft = instance.GetInstallDate();
-                var l = ((long)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
+                    return null;
+                },
+                OnError);
 
-                return DateTime.FromFileTime(l);
-            });
+            Utilities.TrySet(
+                ref installDate,
+                nameof(InstallDate),
+                () =>
+                {
+                    var ft = instance.GetInstallDate();
+                    var l = ((long)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
 
-            TrySet(ref state, nameof(State), instance.GetState);
+                    return DateTime.FromFileTime(l);
+                },
+                OnError);
+
+            Utilities.TrySet(ref state, nameof(State), instance.GetState, OnError);
 
             var lcid = CultureInfo.CurrentUICulture.LCID;
-            TrySet(ref displayName, nameof(DisplayName), () =>
-            {
-                return instance.GetDisplayName(lcid);
-            });
-
-            TrySet(ref description, nameof(Description), () =>
-            {
-                return instance.GetDescription(lcid);
-            });
-
-            TrySet(ref productPath, nameof(ProductPath), () =>
-            {
-                var path = instance.GetProductPath();
-                return instance.ResolvePath(path);
-            });
-
-            TrySet(ref product, nameof(Product), () =>
-            {
-                var reference = instance.GetProduct();
-                if (reference != null)
+            Utilities.TrySet(
+                ref displayName,
+                nameof(DisplayName),
+                () =>
                 {
-                    return new PackageReference(reference);
-                }
+                    return instance.GetDisplayName(lcid);
+                },
+                OnError);
 
-                return null;
-            });
+            Utilities.TrySet(
+                ref description,
+                nameof(Description),
+                () =>
+                {
+                    return instance.GetDescription(lcid);
+                },
+                OnError);
 
-            TrySet(ref packages, nameof(Packages), () =>
+            Utilities.TrySet(
+                ref productPath,
+                nameof(ProductPath),
+                () =>
+                {
+                    var path = instance.GetProductPath();
+                    return instance.ResolvePath(path);
+                },
+                OnError);
+
+            Utilities.TrySet(
+                ref product,
+                nameof(Product),
+                () =>
+                {
+                    var reference = instance.GetProduct();
+                    if (reference != null)
+                    {
+                        return new PackageReference(reference);
+                    }
+
+                    return null;
+                },
+                OnError);
+
+            Packages = Utilities.TrySetCollection(ref packages, nameof(Packages), instance.GetPackages, PackageReferenceFactory.Create, OnError);
+
+            var errors = instance.GetErrors();
+            if (errors != null)
             {
-                return new List<PackageReference>(GetPackages(instance));
-            });
-
-            if (packages != null && packages.Any())
-            {
-                Packages = new ReadOnlyCollection<PackageReference>(packages);
+                Errors = new Errors(errors);
             }
 
-            TrySet(ref properties, nameof(Properties), () =>
-            {
-                var properties = instance.GetProperties();
-                return properties?.GetNames()
-                    .ToDictionary(name => name.ToPascalCase(), name => properties.GetValue(name), StringComparer.OrdinalIgnoreCase);
-            });
+            Utilities.TrySet(
+                ref properties,
+                nameof(Properties),
+                () =>
+                {
+                    var properties = instance.GetProperties();
+                    return properties?.GetNames()
+                        .ToDictionary(name => name.ToPascalCase(), name => properties.GetValue(name), StringComparer.OrdinalIgnoreCase);
+                },
+                OnError);
 
             if (properties != null)
             {
@@ -138,9 +163,9 @@ namespace Microsoft.VisualStudio.Setup
                 Properties = ReadOnlyDictionary<string, object>.Empty;
             }
 
-            TrySet(ref enginePath, nameof(EnginePath), instance.GetEnginePath);
-            TrySet(ref isComplete, nameof(IsComplete), instance.IsComplete);
-            TrySet(ref isLaunchable, nameof(IsLaunchable), instance.IsLaunchable);
+            Utilities.TrySet(ref enginePath, nameof(EnginePath), instance.GetEnginePath, OnError);
+            Utilities.TrySet(ref isComplete, nameof(IsComplete), instance.IsComplete, OnError);
+            Utilities.TrySet(ref isLaunchable, nameof(IsLaunchable), instance.IsLaunchable, OnError);
 
             // Get all properties of the instance not explicitly declared.
             var store = (ISetupPropertyStore)instance;
@@ -210,6 +235,11 @@ namespace Microsoft.VisualStudio.Setup
         public IDictionary<string, object> Properties { get; }
 
         /// <summary>
+        /// Gets errors that occurred during the last install (if any).
+        /// </summary>
+        public Errors Errors { get; }
+
+        /// <summary>
         /// Gets the path to the engine that installed the instance.
         /// </summary>
         public string EnginePath => enginePath;
@@ -229,31 +259,9 @@ namespace Microsoft.VisualStudio.Setup
         /// </summary>
         internal IDictionary<string, object> AdditionalProperties { get; }
 
-        private static IEnumerable<PackageReference> GetPackages(ISetupInstance2 instance)
+        private void OnError(string propertyName)
         {
-            var references = instance.GetPackages();
-            if (references != null)
-            {
-                foreach (var reference in instance.GetPackages())
-                {
-                    if (reference != null)
-                    {
-                        yield return new PackageReference(reference);
-                    }
-                }
-            }
-        }
-
-        private void TrySet<T>(ref T property, string propertyName, Func<T> action)
-        {
-            try
-            {
-                property = action.Invoke();
-            }
-            catch (COMException ex) when (ex.ErrorCode == NativeMethods.E_NOTFOUND)
-            {
-                Trace.WriteLine($@"Instance: property ""{propertyName}"" not found on instance ""{InstanceId}"".");
-            }
+            Trace.WriteLine($@"Instance: property ""{propertyName}"" not found on instance ""{InstanceId}"".");
         }
     }
 }

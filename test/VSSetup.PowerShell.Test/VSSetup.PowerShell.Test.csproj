@@ -46,7 +46,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Setup.Configuration.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.5.125-rc\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.8.24\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Moq, Version=4.5.30.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
@@ -78,13 +78,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorsTests.cs" />
     <Compile Include="ExtensionsTests.cs" />
+    <Compile Include="FailedPackageReferenceTests.cs" />
     <Compile Include="InstanceTests.cs" />
+    <Compile Include="PackageReferenceFactoryTests.cs" />
     <Compile Include="PackageReferenceTests.cs" />
     <Compile Include="PowerShell\ExtensionsTests.cs" />
     <Compile Include="PowerShell\SelectInstanceCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyDictionaryTests.cs" />
+    <Compile Include="UtilitiesTests.cs" />
     <Compile Include="ValidateTests.cs" />
   </ItemGroup>
   <ItemGroup>
