@@ -29,6 +29,8 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// </summary>
         internal const RegexOptions VersionRangeOptions = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline;
 
+        private static readonly WildcardPattern allPattern = new WildcardPattern("*", WildcardOptions.None);
+
         private ISetupHelper helper = null;
         private Instance latestInstance = null;
         private ulong minVersion = 0;
@@ -95,9 +97,10 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             if (Product != null && Product.Any())
             {
                 // Select instances with no product or the specified product ID.
+                var patterns = Product.Select(product => GetPattern(product));
                 instances = from instance in instances
                             let instanceProduct = instance?.Product
-                            where instanceProduct == null || Product.Contains(instanceProduct.Id, StringComparer.OrdinalIgnoreCase)
+                            where instanceProduct == null || patterns.Any(pattern => pattern.IsMatch(instanceProduct.Id))
                             select instance;
             }
 
@@ -146,6 +149,18 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
             // Release the COM object and its resources ASAP.
             helper = null;
+        }
+
+        private static WildcardPattern GetPattern(string pattern)
+        {
+            Validate.NotNullOrEmpty(pattern, nameof(pattern));
+
+            if (pattern.Length == 1 && pattern[0] == '*')
+            {
+                return allPattern;
+            }
+
+            return new WildcardPattern(pattern, WildcardOptions.CultureInvariant | WildcardOptions.IgnoreCase);
         }
 
         private void WriteInstance(Instance instance)
