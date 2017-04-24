@@ -92,4 +92,22 @@ Describe 'Select-VSSetupInstance' {
             $instance.InstanceId | Should Be 1
         }
     }
+
+    Context 'Product wildcards' {
+        It 'Returns all instances' {
+            $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product *)
+            $instances.Count | Should Be 3
+        }
+
+        It 'Returns matching instance' {
+            $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product *BuildTools)
+            $instances.Count | Should Be 1
+            $instances[0].InstanceId | Should Be 4
+        }
+
+        It 'Returns all instances with workload' {
+            $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Workload.ManagedDesktop')
+            $instances.Count | Should Be 2
+        }
+    }
 }
