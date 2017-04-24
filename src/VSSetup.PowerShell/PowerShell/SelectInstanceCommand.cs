@@ -29,7 +29,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// </summary>
         internal const RegexOptions VersionRangeOptions = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline;
 
-        private static readonly WildcardPattern allPattern = new WildcardPattern("*", WildcardOptions.None);
+        private static readonly WildcardPattern AllPattern = new WildcardPattern("*", WildcardOptions.None);
 
         private ISetupHelper helper = null;
         private Instance latestInstance = null;
@@ -157,7 +157,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
             if (pattern.Length == 1 && pattern[0] == '*')
             {
-                return allPattern;
+                return AllPattern;
             }
 
             return new WildcardPattern(pattern, WildcardOptions.CultureInvariant | WildcardOptions.IgnoreCase);
