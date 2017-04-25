@@ -12,4 +12,10 @@ CLRVersion = '4.0'
 RootModule = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
 RequiredAssemblies = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
 TypesToProcess = 'VSSetup.types.ps1xml'
+PrivateData = @{
+  PSData = @{
+    ProjectUri = 'https://github.com/Microsoft/vssetup.powershell'
+    LicenseUri = 'https://github.com/Microsoft/vssetup.powershell/raw/$CommitId$/LICENSE.txt'
+  }
+}
 }

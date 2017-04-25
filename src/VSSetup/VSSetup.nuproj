@@ -43,6 +43,12 @@
   <ItemGroup>
     <File Include="..\VSSetup.PowerShell\bin\$(Configuration)\VSSetup.psd1" />
     <File Include="..\VSSetup.PowerShell\bin\$(Configuration)\VSSetup.types.ps1xml" />
+    <File Include="..\VSSetup.PowerShell\bin\$(Configuration)\about_VSSetup.help.txt" Condition="Exists('..\VSSetup.PowerShell\bin\$(Configuration)\about_VSSetup.help.txt')">
+      <Visible>False</Visible>
+    </File>
+    <File Include="..\VSSetup.PowerShell\bin\$(Configuration)\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml" Condition="Exists('..\VSSetup.PowerShell\bin\$(Configuration)\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml')">
+      <Visible>False</Visible>
+    </File>
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
