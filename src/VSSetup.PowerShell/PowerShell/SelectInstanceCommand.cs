@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             if (Product != null && Product.Any())
             {
                 // Select instances with no product or the specified product ID.
-                var patterns = Product.Select(product => GetPattern(product));
+                var patterns = Product.Select(product => GetPattern(product)).ToArray();
                 instances = from instance in instances
                             let instanceProduct = instance?.Product
                             where instanceProduct == null || patterns.Any(pattern => pattern.IsMatch(instanceProduct.Id))
