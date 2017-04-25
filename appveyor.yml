@@ -2,6 +2,8 @@ configuration:
   - Debug
   - Release
 
+image: Visual Studio 2017
+
 environment:
   RunCodeAnalysis: true
   TreatWarningsAsErrors: true
@@ -21,11 +23,20 @@ notifications:
 cache:
   - packages -> **\packages.config
 
+install:
+  - ps: |
+      $ErrorActionPreference = 'Stop'
+      Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+      Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
+
 before_build:
   - nuget restore
 
 after_build:
+  - ps: New-ExternalHelp -Path $env:APPVEYOR_BUILD_FOLDER\docs\VSSetup -OutputPath $env:APPVEYOR_BUILD_FOLDER\src\VSSetup.PowerShell\bin\$env:CONFIGURATION -Force
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll-Help.xml
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\about_*.help.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
 
 test:
