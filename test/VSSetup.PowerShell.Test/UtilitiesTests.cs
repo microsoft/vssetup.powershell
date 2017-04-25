@@ -76,6 +76,42 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         [Fact]
+        public void TryParseVersion_Success()
+        {
+            Version version;
+            var success = Utilities.TryParseVersion("1.2.3", out version);
+            Assert.True(success);
+            Assert.Equal(new Version("1.2.3"), version);
+        }
+
+        [Fact]
+        public void TryParseVersion_Failure()
+        {
+            Version version;
+            var success = Utilities.TryParseVersion("xxx", out version);
+            Assert.False(success);
+            Assert.Equal(new Version(), version);
+        }
+
+        [Fact]
+        public void TryParseVersion_Null_Yields_Null()
+        {
+            Version version;
+            var success = Utilities.TryParseVersion(null, out version);
+            Assert.False(success);
+            Assert.Equal(null, version);
+        }
+
+        [Fact]
+        public void TryParseVersion_Empty_String_Yields_Null()
+        {
+            Version version;
+            var success = Utilities.TryParseVersion(string.Empty, out version);
+            Assert.False(success);
+            Assert.Equal(null, version);
+        }
+
+        [Fact]
         public void TrySet_PropertyName_Null_Throws()
         {
             string property = null;
