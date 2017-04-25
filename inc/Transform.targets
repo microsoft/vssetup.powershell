@@ -69,5 +69,6 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
     <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersion)">
       <Output TaskParameter="OutputFiles" ItemName="FileWrites" />
     </ReplaceToken>
+    <ReplaceToken InputFiles="%(Template.OutputFilePath)" OutputFiles="%(Template.OutputFilePath)" Expression="\$CommitId\$" Text="$(GitCommitIdShort)" />
   </Target>
 </Project>
