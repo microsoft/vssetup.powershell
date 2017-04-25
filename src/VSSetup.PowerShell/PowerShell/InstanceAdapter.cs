@@ -20,6 +20,8 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         private static readonly string PSPathPropertyName = "PSPath";
         private static readonly string FileSystemProviderPrefix = @"Microsoft.PowerShell.Core\FileSystem::";
 
+        private readonly object propertiesLock = new object();
+
         private PropertySet properties = null;
 
         /// <inheritdoc/>
@@ -109,7 +111,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
         private void EnsureProperties(Instance instance)
         {
-            LazyInitializer.EnsureInitialized(ref properties, () =>
+            Func<PropertySet> initializer = () =>
             {
                 var properties = new PropertySet();
                 foreach (var property in GetProperties(instance))
@@ -118,7 +120,15 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                 }
 
                 return properties;
-            });
+            };
+
+            lock (propertiesLock)
+            {
+                if (properties == null)
+                {
+                    properties = initializer();
+                }
+            }
         }
 
         private IEnumerable<PSAdaptedProperty> GetProperties(Instance instance)

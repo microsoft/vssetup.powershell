@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudio.Setup
             Utilities.TrySet(ref version, nameof(Version), () =>
             {
                 var versionString = reference.GetVersion();
-                if (Version.TryParse(versionString, out Version version))
+                if (Utilities.TryParseVersion(versionString, out Version version))
                 {
                     return version;
                 }

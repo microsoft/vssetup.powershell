@@ -47,6 +47,37 @@ namespace Microsoft.VisualStudio.Setup
         }
 
         /// <summary>
+        /// Tries to convert the string representation of a version number to an equivalent System.Version object,
+        /// and returns a value that indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="input">A string that contains a version number to convert.</param>
+        /// <param name="result">
+        /// When this method returns, contains the System.Version equivalent of the number that is contained in input,
+        /// if the conversion succeeded, or a System.Version object whose major and minor version numbers are 0
+        /// if the conversion failed. If input is null or System.String.Empty, result is null when the method returns.
+        /// </param>
+        /// <returns>true if the input parameter was converted successfully; otherwise, false.</returns>
+        public static bool TryParseVersion(string input, out Version result)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                result = null;
+                return false;
+            }
+
+            try
+            {
+                result = new Version(input);
+                return true;
+            }
+            catch
+            {
+                result = new Version();
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Sets the given <paramref name="property"/> if the <paramref name="action"/> does not throw a <see cref="COMException"/> for 0x80070490.
         /// </summary>
         /// <typeparam name="T">The type of the property to set.</typeparam>
