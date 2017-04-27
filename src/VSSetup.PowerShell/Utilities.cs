@@ -53,8 +53,8 @@ namespace Microsoft.VisualStudio.Setup
         /// <param name="input">A string that contains a version number to convert.</param>
         /// <param name="result">
         /// When this method returns, contains the System.Version equivalent of the number that is contained in input,
-        /// if the conversion succeeded, or a System.Version object whose major and minor version numbers are 0
-        /// if the conversion failed. If input is null or System.String.Empty, result is null when the method returns.
+        /// if the conversion succeeded. If the conversion failed, or if input is null or System.String.Empty,
+        /// result is null when the method returns.
         /// </param>
         /// <returns>true if the input parameter was converted successfully; otherwise, false.</returns>
         public static bool TryParseVersion(string input, out Version result)
@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudio.Setup
             }
             catch
             {
-                result = new Version();
+                result = null;
                 return false;
             }
         }
