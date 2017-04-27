@@ -75,40 +75,21 @@ namespace Microsoft.VisualStudio.Setup
                 x => Assert.Equal("b", x.Id));
         }
 
-        [Fact]
-        public void TryParseVersion_Success()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("1")]
+        [InlineData("1.2")]
+        [InlineData("1.2.3")]
+        [InlineData("1.-2")]
+        [InlineData("xyz")]
+        public void TryParseVersion_Is_Equivalent_To_Version_TryParse(string input)
         {
-            Version version;
-            var success = Utilities.TryParseVersion("1.2.3", out version);
-            Assert.True(success);
-            Assert.Equal(new Version("1.2.3"), version);
-        }
-
-        [Fact]
-        public void TryParseVersion_Failure()
-        {
-            Version version;
-            var success = Utilities.TryParseVersion("xxx", out version);
-            Assert.False(success);
-            Assert.Equal(new Version(), version);
-        }
-
-        [Fact]
-        public void TryParseVersion_Null_Yields_Null()
-        {
-            Version version;
-            var success = Utilities.TryParseVersion(null, out version);
-            Assert.False(success);
-            Assert.Equal(null, version);
-        }
-
-        [Fact]
-        public void TryParseVersion_Empty_String_Yields_Null()
-        {
-            Version version;
-            var success = Utilities.TryParseVersion(string.Empty, out version);
-            Assert.False(success);
-            Assert.Equal(null, version);
+            Version expectedVersion, actualVersion;
+            var expectedResult = Version.TryParse(input, out expectedVersion);
+            var actualResult = Utilities.TryParseVersion(input, out actualVersion);
+            Assert.Equal(expectedResult, actualResult);
+            Assert.Equal(expectedVersion, actualVersion);
         }
 
         [Fact]
