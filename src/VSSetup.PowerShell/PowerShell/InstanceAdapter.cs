@@ -25,8 +25,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         public override Collection<PSAdaptedProperty> GetProperties(object baseObject)
         {
-            var instance = baseObject as Instance;
-            if (instance != null)
+            if (baseObject is Instance instance)
             {
                 EnsureProperties(instance);
                 return new Collection<PSAdaptedProperty>(properties);
@@ -38,8 +37,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         public override PSAdaptedProperty GetProperty(object baseObject, string propertyName)
         {
-            var instance = baseObject as Instance;
-            if (instance != null)
+            if (baseObject is Instance instance)
             {
                 EnsureProperties(instance);
 
@@ -67,8 +65,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// <inheritdoc/>
         public override object GetPropertyValue(PSAdaptedProperty adaptedProperty)
         {
-            var instance = adaptedProperty.BaseObject as Instance;
-            if (instance != null)
+            if (adaptedProperty.BaseObject is Instance instance)
             {
                 var name = adaptedProperty.Name;
                 if (string.Equals(name, PSPathPropertyName, StringComparison.OrdinalIgnoreCase))
