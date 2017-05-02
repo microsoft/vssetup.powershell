@@ -22,8 +22,8 @@ namespace Microsoft.VisualStudio.Setup
         {
             Validate.NotNull(version, nameof(version));
 
-            int build = version.Build > 0 ? version.Build : 0;
-            int revision = version.Revision > 0 ? version.Revision : 0;
+            var build = version.Build > 0 ? version.Build : 0;
+            var revision = version.Revision > 0 ? version.Revision : 0;
 
             return new Version(version.Major, version.Minor, build, revision);
         }

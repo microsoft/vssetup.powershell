@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             do
             {
                 fetched = 0;
-                ISetupInstance[] instances = new ISetupInstance[1];
+                var instances = new ISetupInstance[1];
 
                 e.Next(1, instances, out fetched);
                 if (fetched != 0)

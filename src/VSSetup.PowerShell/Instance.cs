@@ -64,10 +64,8 @@ namespace Microsoft.VisualStudio.Setup
                 nameof(InstallationVersion),
                 () =>
                 {
-                    Version version;
-
                     var versionString = instance.GetInstallationVersion();
-                    if (Version.TryParse(versionString, out version))
+                    if (Version.TryParse(versionString, out Version version))
                     {
                         return version.Normalize();
                     }
