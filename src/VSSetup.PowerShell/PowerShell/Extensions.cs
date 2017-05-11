@@ -79,7 +79,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                 }
                 else
                 {
-                    return LanguagePrimitives.ConvertTo<T>(property.Value);
+                    return (T)LanguagePrimitives.ConvertTo(property.Value, typeof(T));
                 }
             }
 
