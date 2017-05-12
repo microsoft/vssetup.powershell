@@ -45,11 +45,11 @@ if "%keep%"=="" set params=%params% --rm
 set outputPath=%solutionDir%src\VSSetup.PowerShell\bin\%configuration%
 set volumes=-v "%outputPath%:C:\Users\ContainerAdministrator\Documents\WindowsPowerShell\Modules\VSSetup:ro"
 set volumes=%volumes% -v "%projectDir%Instances:C:\ProgramData\Microsoft\VisualStudio\Packages\_Instances:ro"
+set volumes=%volumes% -v "%projectDir%Tests:C:\Tests"
 set volumes=%volumes% -v C:\VS\Community
 set volumes=%volumes% -v C:\VS\Professional
 set volumes=%volumes% -v C:\VS\Enterprise
 set volumes=%volumes% -v C:\BuildTools
-set volumes=%volumes% -v "%projectDir%Tests:C:\Tests"
 
 if "%id%"=="" (
     REM Uses the ENTRYPOINT declaration in the Dockerfile

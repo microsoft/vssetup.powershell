@@ -39,9 +39,8 @@ after_build:
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\about_*.help.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
 
-test:
-  assemblies:
-    - '**\bin\$(configuration)\*.test.dll'
+test_script:
+  - tools\test.cmd
 
 artifacts:
   - path: bin\$(configuration)\VSSetup.zip
