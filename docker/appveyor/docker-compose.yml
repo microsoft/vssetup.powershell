@@ -1,0 +1,16 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+version: '2.1'
+services:
+  test:
+    build: .
+    volumes:
+      - ../../src/VSSetup.PowerShell/bin/${CONFIGURATION:-Debug}:C:/Users/ContainerAdministrator/Documents/WindowsPowerShell/Modules/VSSetup:ro
+      - ../Instances:C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances:ro
+      - ../Tests:C:/Tests
+      - C:/VS/Community
+      - C:/VS/Professional
+      - C:/VS/Enterprise
+      - C:/BuildTools
+    network_mode: transparent
