@@ -13,4 +13,4 @@ services:
       - C:/VS/Professional
       - C:/VS/Enterprise
       - C:/BuildTools
-    network_mode: transparent
+    network_mode: "none"
