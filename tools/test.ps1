@@ -81,9 +81,18 @@ if (get-command docker-compose -ea SilentlyContinue) {
     [string] $path = resolve-path "$PSScriptRoot\..\docker\appveyor\docker-compose.yml"
     write-verbose "Running tests in $path"
 
-    docker-compose -f "$path" run test -c Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
+    $verbose = if ($VerbosePreference -eq 'Continue') {
+        '--verbose'
+    }
+
+    docker-compose -f "$path" $verbose run -T test -c Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
     if ($env:APPVEYOR -eq 'true') {
-        invoke-webrequest "https://ci.appveyor.com/api/testresults/nunit/${env:APPVEYOR_JOB_ID}" -method POST -contentType 'multipart/form-data' -inFile "$PSScriptRoot\..\Results.xml"
+        [string] $path = resolve-path "$PSScriptRoot\..\docker\Tests\Results.xml"
+        $url = "https://ci.appveyor.com/api/testresults/nunit/${env:APPVEYOR_JOB_ID}"
+        write-verbose "Uploading '$path' to '$url'"
+
+        $wc = new-object System.Net.WebClient
+        $wc.UploadFile($url, $path)
     }
 
     exit $LASTEXITCODE
