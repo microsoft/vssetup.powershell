@@ -49,23 +49,27 @@ nuget install xunit.runner.console -outputdirectory packages
 packages\xunit.runner.console.<version>\tools\xunit.runner.console test\VSSetup.PowerShell.Test\bin\Debug\Microsoft.VisualStudio.Setup.PowerShell.Test.dll
 ```
 
-It's also recommended that, if your machine supports it, you install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior.
+If your machine supports it, you can install [Docker for Windows][docker], switch to Windows containers, and test in isolated containers for runtime behavior. You can run unit tests and integration tests together.
 
 ```batch
-REM You only need to build once unless updating the Dockerfile or files it copies.
-docker\build
-
-REM This will automatically map build output. Defaults to Debug configuration. Pass -? for options.
-docker\test
+tools\test.cmd
 ```
 
-For a faster development process, you can run `docker\run -detach`, copy the container ID printed to the window, then subsequently run `docker\test -on <container id>` replacing `<container id>` with the container ID you copied previously. You can make changes to the test data and even rebuild the module and run this command again as frequently as you need. This is especially handy for quick turn around when debugging and fixing a problem.
+For a faster development process, you can run `docker-compose run test` from the _docker_ directory to start an interactive PowerShell session in a container running the Visual Studio Remote Debugger. The build output and test scripts are mounted into the container. If you rebuild or modify the tests the container is automatically updated. You can also start the container detached and run tests faster without having to restart the container.
 
-To stop the container, run `docker stop <container id>`. If you did not pass `-keep` when you started the container it will be removed automatically.
+```batch
+cd docker
+docker-compose up -d
+
+REM Repeat following command as often as desired.
+docker-compose exec test powershell.exe -c invoke-pester c:\tests -enableexit
+
+docker-compose stop
+```
 
 ### Debugging
 
-You can also run `docker\run.cmd` to start an interactive shell for exploratory testing. If no other commands are passed when starting the container, the Visual Studio Remote Debugger will launch by default. Remote debugging services are discoverable on your private network.
+You can run `docker-compose up -d` from the _docker_ directory to start an interactive shell for exploratory testing. If no other commands are passed when starting the container, the Visual Studio Remote Debugger will launch by default. Remote debugging services are discoverable on your private network.
 
 1. Click *Debug -> Attach to Process*
 2. Change *Transport* to "Remote (no authentication)"
@@ -74,7 +78,7 @@ You can also run `docker\run.cmd` to start an interactive shell for exploratory 
 5. Select "powershell" under *Available Processes*
 6. Click *Attach*
 
-If you know the host name or IP address (depending on your network configuration for the container), you can type it into the *Qualifier* directory along with port 4020, e.g. "172.22.0.1:4020".
+If you know the host name (by default, the container name) or IP address (depending on your network configuration for the container), you can type it into the *Qualifier* directory along with port 4022, e.g. "172.22.0.1:4022".
 
 ## Pull Requests
 
