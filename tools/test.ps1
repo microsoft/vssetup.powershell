@@ -98,10 +98,22 @@ if ($Type -contains 'Integration')
             '--verbose'
         }
 
+        # Set environment variables based on parameters so docker-compose uses them (-e doesn't seem to work on Windows).
+        $OldConfiguration = $env:CONFIGURATION
+        $env:CONFIGURATION = $Configuration
+
+        $OldPlatform = $env:PLATFORM
+        $env:PLATFORM = $Platform
+
         write-verbose "Running tests in '$path'"
-        docker-compose -f "$path" $verbose run $no_tty --rm test -c Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
-        if (-not $?) {
-            $Failed = $true
+        try {
+            docker-compose -f "$path" $verbose run $no_tty --rm test -c Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
+            if (-not $?) {
+                $Failed = $true
+            }
+        } finally {
+            $env:CONFIGURATION = $OldConfiguration
+            $env:PLATFORM = $OldPlatform
         }
 
         if ($env:APPVEYOR_JOB_ID) {
@@ -118,3 +130,30 @@ if ($Type -contains 'Integration')
         exit 1
     }
 }
+
+<#
+.SYNOPSIS
+Runs unit and integration tests.
+
+.DESCRIPTION
+Use this script to run unit and integration tests on this project.
+You can also run one or the other using the -Type parameter.
+
+When run in AppVeyor, test results will be posted to the run.
+
+.PARAMETER Configuration
+Set the build configuration. Defaults to the $env:CONFIGURATION environment variable;
+otherwise, "Debug" if the environment variable is not set.
+
+.PARAMETER Platform
+Set the build platform. Defaults to the $env:PLATFORM environment variable;
+otherwise, "x86" if the environment variable is not set.
+
+.PARAMETER Type
+Specify the type of tests to run. Values include "unit" and "integration".
+
+.EXAMPLE
+tools\test.ps1 -configuration release -type integration -v
+
+This will run integration tests using the release binaries (if built) with verbose output.
+#>
