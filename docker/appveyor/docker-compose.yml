@@ -4,6 +4,7 @@
 version: "2.1"
 services:
   test:
+    # Need to override build context since AppVeyor version of docker-compose fails with just "image".
     build: .
     extends:
       file: ../docker-compose.yml
