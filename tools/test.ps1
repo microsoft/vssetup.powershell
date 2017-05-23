@@ -67,15 +67,6 @@ if ($Type -contains 'Unit')
         "$path"
     }
 
-    # Find the test adapter.
-    $adapter = get-childitem "$PSScriptRoot\..\packages\xunit.runner.visualstudio*" -filter xunit.runner.visualstudio.testadapter.dll -recurse | select-object -first 1 -expand FullName | foreach-object {
-        "/TestAdapterPath:`"$($_.FullName)`""
-    }
-
-    if (-not $adapter) {
-        write-warning 'Could not find test adapter. Unit tests may not be discovered.'
-    }
-
     # Run unit tests.
     & $cmd $logger $assemblies /parallel /platform:$Platform
     if (-not $?) {
