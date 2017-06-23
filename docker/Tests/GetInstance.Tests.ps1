@@ -5,6 +5,12 @@ Describe 'Get-VSSetupInstance' {
     $en = New-Object System.Globalization.CultureInfo 'en-US'
     $de = New-Object System.Globalization.CultureInfo 'de-DE'
 
+    BeforeAll {
+        # Always write to 32-bit registry key.
+        $key = New-Item -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\Setup\Reboot -Force
+        $null = $key | New-ItemProperty -Name 3 -Value 1 -Force
+    }
+
     Context 'Launchable instances' {
         $instances = Get-VSSetupInstance
 
@@ -110,6 +116,24 @@ Describe 'Get-VSSetupInstance' {
         It 'Contains skipped packages' {
             $instance.Errors.SkippedPackages.Count | Should Be 1
             $instance.Errors.SkippedPackages[0].Id | Should Be 'Microsoft.VisualStudio.Component.Sharepoint.Tools'
+        }
+    }
+
+    Context 'Prerelease' {
+        It 'Contains 4 instances' {
+            $instances = Get-VSSetupInstance -Prerelease
+            $instances.Count | Should Be 4
+        }
+
+        It 'Contains 1 prerelease' {
+            $instances = @(Get-VSSetupInstance -Prerelease | Where-Object { $_.IsPrerelease })
+            $instances.Count | Should Be 1
+        }
+
+        It 'Always with path' {
+            $instances = @(Get-VSSetupInstance C:\VS\Preview)
+            $instances.Count | Should Be 1
+            $instances[0].InstanceId | Should Be 5
         }
     }
 }

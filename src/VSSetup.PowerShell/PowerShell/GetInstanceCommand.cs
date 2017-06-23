@@ -33,6 +33,12 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         public SwitchParameter All { get; set; }
 
         /// <summary>
+        /// Gets or sets whether to show prereleases.
+        /// </summary>
+        [Parameter(ParameterSetName = AllParameterSet)]
+        public SwitchParameter Prerelease { get; set; }
+
+        /// <summary>
         /// Gets or sets the Path parameter.
         /// </summary>
         [Parameter(ParameterSetName = PathParameterSet, Position = 0, Mandatory = true, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
@@ -91,7 +97,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                     try
                     {
                         var instance = (ISetupInstance2)query.GetInstanceForPath(providerPath);
-                        WriteInstance(instance);
+                        WriteInstance(instance, all: true);
                     }
                     catch (COMException ex) when (ex.ErrorCode == NativeMethods.E_NOTFOUND)
                     {
@@ -128,12 +134,16 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             while (fetched != 0);
         }
 
-        private void WriteInstance(ISetupInstance2 instance)
+        private void WriteInstance(ISetupInstance2 instance, bool all = false)
         {
             if (instance != null)
             {
                 var adapted = new Instance(instance);
-                WriteObject(adapted);
+
+                if (all || Prerelease || adapted.IsPrerelease != true)
+                {
+                    WriteObject(adapted);
+                }
             }
         }
     }

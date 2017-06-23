@@ -35,6 +35,8 @@ namespace Microsoft.VisualStudio.Setup
         private readonly string enginePath;
         private readonly bool isComplete;
         private readonly bool isLaunchable;
+        private readonly IDictionary<string, object> catalogInfo;
+        private readonly bool? isPrerelease;
 
         static Instance()
         {
@@ -165,6 +167,38 @@ namespace Microsoft.VisualStudio.Setup
             Utilities.TrySet(ref isComplete, nameof(IsComplete), instance.IsComplete, OnError);
             Utilities.TrySet(ref isLaunchable, nameof(IsLaunchable), instance.IsLaunchable, OnError);
 
+            Utilities.TrySet(
+                ref catalogInfo,
+                nameof(CatalogInfo),
+                () =>
+                {
+                    var catalog = instance as ISetupInstanceCatalog;
+                    var properties = catalog?.GetCatalogInfo();
+                    return properties?.GetNames()
+                        .ToDictionary(name => name.ToPascalCase(), name => properties.GetValue(name), StringComparer.OrdinalIgnoreCase);
+                },
+                OnError);
+
+            if (catalogInfo != null)
+            {
+                CatalogInfo = new ReadOnlyDictionary<string, object>(catalogInfo);
+            }
+            else
+            {
+                // While accessing properties on a null object succeeds in PowerShell, accessing the indexer does not.
+                CatalogInfo = ReadOnlyDictionary<string, object>.Empty;
+            }
+
+            Utilities.TrySet(
+                ref isPrerelease,
+                nameof(IsPrerelease),
+                () =>
+                {
+                    var catalog = instance as ISetupInstanceCatalog;
+                    return catalog?.IsPrerelease();
+                },
+                OnError);
+
             // Get all properties of the instance not explicitly declared.
             var store = (ISetupPropertyStore)instance;
             AdditionalProperties = store.GetNames()
@@ -251,6 +285,18 @@ namespace Microsoft.VisualStudio.Setup
         /// Gets a value indicating whether the instance is launchable (e.g. may have errors but other features work).
         /// </summary>
         public bool IsLaunchable => isLaunchable;
+
+        /// <summary>
+        /// Gets properties for the catalog for this instance.
+        /// </summary>
+        /// <value>The value may be empty if no catalog information is available.</value>
+        public IDictionary<string, object> CatalogInfo { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the instance represents a prerelease.
+        /// </summary>
+        /// <value>The value may be null if no catalog information is available.</value>
+        public bool? IsPrerelease => isPrerelease;
 
         /// <summary>
         /// Gets additional properties not explicitly defined on this class.

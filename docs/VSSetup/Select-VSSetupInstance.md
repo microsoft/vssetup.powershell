@@ -13,7 +13,7 @@ Selects instances of Visual Studio and related products based on criteria.
 
 ```
 Select-VSSetupInstance [-Instance] <Instance[]> [-Product <String[]>] [-Require <String[]>] [-Version <String>]
- [-Latest]
+ [-Latest] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -79,7 +79,7 @@ Required: False
 Position: Named
 Default value: Microsoft.VisualStudio.Product.Community, Microsoft.VisualStudio.Product.Professional, Microsoft.VisualStudio.Product.Enterprise
 Accept pipeline input: False
-Accept wildcard characters: True
+Accept wildcard characters: False
 ```
 
 ### -Require
@@ -111,6 +111,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

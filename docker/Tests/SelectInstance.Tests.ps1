@@ -2,6 +2,12 @@
 # Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 
 Describe 'Select-VSSetupInstance' {
+    BeforeAll {
+        # Always write to 32-bit registry key.
+        $key = New-Item -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\Setup\Reboot -Force
+        $null = $key | New-ItemProperty -Name 3 -Value 1 -Force
+    }
+
     Context 'Defaults to VS' {
         $instances = Get-VSSetupInstance | Select-VSSetupInstance
 
