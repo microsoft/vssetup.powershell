@@ -33,6 +33,9 @@ before_build:
   - nuget restore
   - ps: New-ExternalHelp -Path $env:APPVEYOR_BUILD_FOLDER\docs\VSSetup -OutputPath $env:APPVEYOR_BUILD_FOLDER\src\VSSetup.PowerShell\bin\$env:CONFIGURATION -Force
 
+build:
+  parallel: true
+
 after_build:
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll-Help.xml
