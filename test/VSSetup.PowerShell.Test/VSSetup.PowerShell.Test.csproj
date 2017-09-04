@@ -82,6 +82,8 @@
     <Compile Include="ExtensionsTests.cs" />
     <Compile Include="FailedPackageReferenceTests.cs" />
     <Compile Include="InstanceTests.cs" />
+    <Compile Include="LazyTests.cs" />
+    <Compile Include="ModuleTests.cs" />
     <Compile Include="PackageReferenceFactoryTests.cs" />
     <Compile Include="PackageReferenceTests.cs" />
     <Compile Include="PowerShell\ExtensionsTests.cs" />

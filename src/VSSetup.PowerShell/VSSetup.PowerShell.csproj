@@ -51,9 +51,12 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FailedPackageReference.cs" />
     <Compile Include="Instance.cs" />
+    <Compile Include="Module.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PackageReference.cs" />
     <Compile Include="PackageReferenceFactory.cs" />
+    <Compile Include="Lazy.cs" />
+    <Compile Include="PowerShell\VersionTable.cs" />
     <Compile Include="QueryFactory.cs" />
     <Compile Include="PowerShell\Extensions.cs" />
     <Compile Include="PowerShell\GetInstanceCommand.cs" />
@@ -67,6 +70,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReadOnlyDictionary.cs" />
+    <Compile Include="SafeModuleHandle.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Validate.cs" />
   </ItemGroup>
@@ -75,6 +79,9 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="VSSetup.types.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="VSSetup.psm1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Template Include="VSSetup.psd1" />

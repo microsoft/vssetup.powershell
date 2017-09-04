@@ -7,6 +7,18 @@ Enumerate and select instances of Visual Studio.
 # LONG DESCRIPTION
 Visual Studio 2017 introduced a new setup engine capable of installing multiple instances of Visual Studio and other products in the Visual Studio family. This module provides commands to enumerate those instances and select instances that meet your criteria. For example, in a development environment you might have a script that finds an instance of Visual Studio with the the Managed Desktop workload for writing projects targeting the .NET Framework. See below for more examples.
 
+# VARIABLES
+You can get the version of this module or of the query API the module uses from the `$VSSetupVersionTable` variable.
+
+```
+PS> $VSSetupVersionTable
+
+Name                           Value
+----                           -----
+QueryVersion                   1.15.23.19330
+ModuleVersion                  2.1.2.4917
+```
+
 # EXAMPLES
 You can enumerate all instances - even those with errors that require a repair - with the following command.
 
