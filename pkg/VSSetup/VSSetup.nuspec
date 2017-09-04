@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>VSSetup</id>
+    <version>$Version$</version>
+    <title>Visual Studio Setup PowerShell Module</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://go.microsoft.com/fwlink/?linkid=839265</iconUrl>
+    <licenseUrl>https://github.com/Microsoft/vssetup.powershell/tree/$CommitId$/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/vssetup.powershell</projectUrl>
+    <description>PowerShell module to interact with Visual Studio Setup</description>
+    <summary>Visual Studio Setup PowerShell Module</summary>
+    <copyright>Copyright (C) Microsoft Corporation. All rights reserved.</copyright>
+    <tags>PSModule PSIncludes_Cmdlet PSCmdlet_Get-VSSetupInstance PSCmdlet_Select-VSSetupInstance PSCommand_Get-VSSetupInstance PSCommand_Select-VSSetupInstance</tags>
+    <releaseNotes>https://github.com/Microsoft/vssetup.powershell/releases/tag/$Version$</releaseNotes>
+  </metadata>
+  <files>
+    <file src="LICENSE.txt" target="tools\"/>
+    <file src="src\VSSetup.PowerShell\bin\$Configuration$\VSSetup.psd1" />
+    <file src="src\VSSetup.PowerShell\bin\$Configuration$\VSSetup.types.ps1xml" />
+    <file src="src\VSSetup.PowerShell\bin\$Configuration$\about_VSSetup.help.txt" />
+    <file src="src\VSSetup.PowerShell\bin\$Configuration$\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml" />
+  </files>
+</package>

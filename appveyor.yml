@@ -37,10 +37,12 @@ build:
   parallel: true
 
 after_build:
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\LICENSE.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll-Help.xml
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\about_*.help.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
+  - nuget pack -BasePath "%APPVEYOR_BUILD_FOLDER%" -OutputDirectory "bin\%CONFIGURATION%" -Version "%GitBuildVersionSimple%" -Properties "Configuration=%CONFIGURATION%;CommitId=%APPVEYOR_REPO_COMMIT%" pkg\VSSetup\VSSetup.nuspec
 
 test_script:
   - tools\test.cmd -v
