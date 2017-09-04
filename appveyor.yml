@@ -51,7 +51,7 @@ artifacts:
   - path: bin\$(configuration)\VSSetup.zip
     name: VSSetup
 
-  - path: src\VSSetup\bin\$(configuration)\*.nupkg
+  - path: bin\$(configuration)\*.nupkg
     name: package
 
 deploy:
