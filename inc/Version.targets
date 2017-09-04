@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Copyright (C) Microsoft Corporation. All rights reserved.
+Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BuildDependsOn>
+      SetCloudVersionVariables;
+      $(BuildDependsOn)
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <!-- Set GitVersionBuildSimple until https://github.com/AArnott/Nerdbank.GitVersioning/pull/146 is accepted. -->
+  <Target Name="SetCloudVersionVariables" DependsOnTargets="GetBuildVersion">
+    <Exec Condition="'$(APPVEYOR)'=='True'" Command="appveyor SetVariable -Name GitBuildVersionSimple -Value &quot;$(BuildVersionSimple)&quot;"/>
+    <Message Condition="'$(SYSTEM_TEAMPROJECTID)'!=''" Text="##vso[task.setvariable variable=GitBuildVersionSimple;]$(BuildVersionSimple)"/>
+  </Target>
+</Project>
