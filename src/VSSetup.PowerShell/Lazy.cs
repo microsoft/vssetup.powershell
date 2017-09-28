@@ -13,6 +13,7 @@ namespace Microsoft.VisualStudio.Setup
     /// <typeparam name="T">The type to create when <see cref="Value"/> is first accessed.</typeparam>
     internal class Lazy<T> : IDisposable
     {
+        private readonly object syncRoot = new object();
         private readonly Func<T> factory;
         private bool hasValue = false;
         private T value = default(T);
@@ -34,7 +35,7 @@ namespace Microsoft.VisualStudio.Setup
         {
             get
             {
-                lock (this)
+                lock (syncRoot)
                 {
                     return hasValue;
                 }
@@ -50,7 +51,7 @@ namespace Microsoft.VisualStudio.Setup
             {
                 if (!hasValue)
                 {
-                    lock (this)
+                    lock (syncRoot)
                     {
                         if (!hasValue)
                         {
