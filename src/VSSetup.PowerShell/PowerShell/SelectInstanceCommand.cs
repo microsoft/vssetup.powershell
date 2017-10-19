@@ -13,7 +13,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using Configuration;
 
     /// <summary>
-    /// The Get-VSSetupInstance command.
+    /// The Select-VSSetupInstance command.
     /// </summary>
     [Cmdlet(VerbsCommon.Select, "VSSetupInstance")]
     [OutputType(typeof(Instance))]
