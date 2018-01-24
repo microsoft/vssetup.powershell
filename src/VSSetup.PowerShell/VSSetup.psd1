@@ -15,6 +15,10 @@ RequiredAssemblies = @(
   'Microsoft.VisualStudio.Setup.PowerShell.dll',
   'Microsoft.VisualStudio.Setup.Configuration.Interop.dll'
 )
+CmdletsToExport = @(
+  'Get-VSSetupInstance'
+  'Select-VSSetupInstance'
+)
 TypesToProcess = 'VSSetup.types.ps1xml'
 PrivateData = @{
   PSData = @{
