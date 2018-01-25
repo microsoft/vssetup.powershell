@@ -1,5 +1,6 @@
 ---
 external help file: Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml
+Module Name: VSSetup
 online version: https://github.com/Microsoft/vssetup.powershell/raw/master/docs/VSSetup/Get-VSSetupInstance.md
 schema: 2.0.0
 ---
@@ -53,22 +54,7 @@ Enumerate all instances of Visual Studio - even those with fatal errors.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: All
-Aliases: 
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Prerelease
-Also show prereleases / previews. By default, only releases are shown.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: All
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -98,12 +84,27 @@ The path to the product installation directory. Wildcards are supported.
 ```yaml
 Type: String[]
 Parameter Sets: Path
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -Prerelease
+Also show prereleases / previews. By default, only releases are shown.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -119,3 +120,7 @@ One or more paths to product installation directories.
 
 ### Microsoft.VisualStudio.Setup.Instance
 Information about each instance enumerated.
+
+## NOTES
+
+## RELATED LINKS

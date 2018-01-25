@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     public class ExtensionsTests
     {
 #pragma warning disable SA1401 // Fields must be private
-        public static IEnumerable<object[]> ContainsAllExceptionCases = new[]
+        public static IEnumerable<object[]> ContainsExceptionCases = new[]
         {
             new object[] { "source", null, null, null },
             new object[] { "selector", new[] { new Tuple<string, int>("a", 1) }, null, null },
@@ -23,7 +23,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 #pragma warning restore SA1401 // Fields must be private
 
         [Theory]
-        [MemberData(nameof(ContainsAllExceptionCases))]
+        [MemberData(nameof(ContainsExceptionCases))]
         public void ContainsAll_Null_Throws(string paramName, IEnumerable<Tuple<string, int>> source, Func<Tuple<string, int>, string> selector, IEnumerable<string> keys)
         {
             Assert.Throws<ArgumentNullException>(paramName, () => source.ContainsAll(selector, keys));
@@ -98,6 +98,84 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             };
 
             Assert.True(items.ContainsAll(item => item.Key, keys));
+        }
+
+        [Theory]
+        [MemberData(nameof(ContainsExceptionCases))]
+        public void ContainsAny_Null_Throws(string paramName, IEnumerable<Tuple<string, int>> source, Func<Tuple<string, int>, string> selector, IEnumerable<string> keys)
+        {
+            Assert.Throws<ArgumentNullException>(paramName, () => source.ContainsAny(selector, keys));
+        }
+
+        [Fact]
+        public void ContainsAny_Empty_Source_Empty_Keys()
+        {
+            var items = new Tuple<string, int>[0];
+            var keys = Enumerable.Empty<string>();
+
+            Assert.True(items.ContainsAny(item => item.Item1, keys));
+        }
+
+        [Fact]
+        public void ContainsAny_Empty_Source_With_Keys()
+        {
+            var items = new Tuple<string, int>[0];
+            var keys = new[] { "a" };
+
+            Assert.False(items.ContainsAny(item => item.Item1, keys));
+        }
+
+        [Fact]
+        public void ContainsAny_With_Source_Empty_Keys()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = Enumerable.Empty<string>();
+
+            Assert.True(items.ContainsAny(item => item.Key, keys));
+        }
+
+        [Fact]
+        public void ContainsAny_Without_Keys()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = new[]
+            {
+                "y",
+                "x",
+            };
+
+            Assert.False(items.ContainsAny(item => item.Key, keys));
+        }
+
+        [Fact]
+        public void ContainsAny()
+        {
+            var items = new[]
+            {
+                new { Key = "a", Value = 1 },
+                new { Key = "b", Value = 2 },
+                new { Key = "c", Value = 3 },
+            };
+
+            var keys = new[]
+            {
+                "a",
+                "x",
+            };
+
+            Assert.True(items.ContainsAny(item => item.Key, keys));
         }
 
         [Fact]
