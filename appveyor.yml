@@ -66,6 +66,7 @@ deploy:
 
   - provider: GitHub
     description: 'Prerelease of version $(appveyor_build_version)'
+    prerelease: true
     auth_token:
       secure: OQYrPN9oRtZHmy6BthAD7WrNdNMIhjOj5J+1YO96vnYnAhQ3ZRTGg0naaAlUsvpW
     artifact: VSSetup
