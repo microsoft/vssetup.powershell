@@ -24,6 +24,7 @@ PrivateData = @{
   PSData = @{
     ProjectUri = 'https://github.com/Microsoft/vssetup.powershell'
     LicenseUri = 'https://github.com/Microsoft/vssetup.powershell/raw/$CommitId$/LICENSE.txt'
+    Prerelease = '$Prerelease$'
   }
 }
 }

@@ -56,30 +56,38 @@ artifacts:
 
 deploy:
   - provider: GitHub
+    description: 'Release of version $(appveyor_build_version)'
     auth_token:
-      secure: 5K94QY8dHKlbjvlBpQaXwAkmDf+LQE3g5WlU9snnNMjDjf0UT4xDoOBCLWcmwZOm
+      secure: OQYrPN9oRtZHmy6BthAD7WrNdNMIhjOj5J+1YO96vnYnAhQ3ZRTGg0naaAlUsvpW
     artifact: VSSetup
     on:
       branch: master
       configuration: Release
 
+  - provider: GitHub
+    description: 'Prerelease of version $(appveyor_build_version)'
+    auth_token:
+      secure: OQYrPN9oRtZHmy6BthAD7WrNdNMIhjOj5J+1YO96vnYnAhQ3ZRTGg0naaAlUsvpW
+    artifact: VSSetup
+    on:
+      branch: develop
+      configuration: Release
+
   - provider: NuGet
     server: https://powershellgallery.com
     api_key:
-      secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
+      secure: zlSsf1CjcEIqOM58eGv9sOJmGL24l9sFfE+GxftIiD3bJwJKNnlwbfe1/H81TQQD
     artifact: package
     skip_symbols: true
     on:
-      branch: master
       configuration: Release
 
   - provider: NuGet
     server: https://nuget.smbsrc.net/
     api_key:
-      secure: WPxjuSouwbCdM6I771BfIbOk8gA883+l9RKUCfFknaUT1vYPmTpT2ABF9r+J0JgR
+      secure: d8ZqLghGiOFGr7Bu1x69hHKaopNtHRCmex72n6n7Ul80enJWM65tw9c1wlnXw4yP
     artifact: /.*\.symbols\.nupkg/
     on:
-      branch: master
       configuration: Release
 
 # vim: set ai et st=2 sts=2 sw=2:
