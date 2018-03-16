@@ -51,6 +51,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FailedPackageReference.cs" />
     <Compile Include="Instance.cs" />
+    <Compile Include="InstanceComparer.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PackageReference.cs" />
