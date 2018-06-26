@@ -1,3 +1,6 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
 configuration:
   - Debug
   - Release
@@ -56,15 +59,6 @@ artifacts:
 
 deploy:
   - provider: GitHub
-    description: 'Release of version $(appveyor_build_version)'
-    auth_token:
-      secure: OQYrPN9oRtZHmy6BthAD7WrNdNMIhjOj5J+1YO96vnYnAhQ3ZRTGg0naaAlUsvpW
-    artifact: VSSetup
-    on:
-      branch: master
-      configuration: Release
-
-  - provider: GitHub
     description: 'Prerelease of version $(appveyor_build_version)'
     prerelease: true
     auth_token:
@@ -81,6 +75,7 @@ deploy:
     artifact: package
     skip_symbols: true
     on:
+      branch: develop
       configuration: Release
 
   - provider: NuGet
@@ -89,6 +84,7 @@ deploy:
       secure: d8ZqLghGiOFGr7Bu1x69hHKaopNtHRCmex72n6n7Ul80enJWM65tw9c1wlnXw4yP
     artifact: /.*\.symbols\.nupkg/
     on:
+      branch: develop
       configuration: Release
 
 # vim: set ai et st=2 sts=2 sw=2:

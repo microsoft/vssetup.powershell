@@ -20,6 +20,7 @@
     <file src="LICENSE.txt" target="tools\"/>
     <file src="src\VSSetup.PowerShell\bin\$Configuration$\*.dll" />
     <file src="src\VSSetup.PowerShell\bin\$Configuration$\*.dll-Help.xml" />
+    <file src="src\VSSetup.PowerShell\bin\$Configuration$\*.pdb" />
     <file src="src\VSSetup.PowerShell\bin\$Configuration$\about_*.help.txt" />
     <file src="src\VSSetup.PowerShell\bin\$Configuration$\VSSetup.*" />
   </files>
