@@ -1,0 +1,154 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - appveyor.yml
+
+phases:
+- phase: Build
+  queue:
+    name: VSEng-MicroBuildVS2017
+    demands:
+    - msbuild
+    - visualstudio
+    - vstest
+    parallel: 2
+    matrix:
+      debug:
+        Configuration: Debug
+        SignType: Test
+      release:
+        Configuration: Release
+
+  variables:
+    Platform: Any CPU
+    Solution: '*.sln'
+
+  steps:
+  - task: NuGetToolInstaller@0
+    displayName: Install nuget
+    inputs:
+      versionSpec: '4.4.1'
+
+  - task: NuGetCommand@2
+    displayName: Restore nuget packages
+    inputs:
+      restoreSolution: $(Solution)
+
+  - task: MicroBuildSigningPlugin@1
+    displayName: Install MicroBuild signing plugin
+    inputs:
+      esrpSigning: true
+      signType: $(SignType)
+
+  - powershell: |
+      $ErrorActionPreference = 'Stop'
+      Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+      Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
+    displayName: Install PowerShell modules
+
+  - powershell: |
+      New-ExternalHelp -Path docs\VSSetup -OutputPath "src\VSSetup.PowerShell\bin\${env:CONFIGURATION}" -Force
+    displayName: Compile documentation
+    env:
+      CONFIGURATION: $(Configuration)
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - task: VSBuild@1
+    displayName: Build solution
+    inputs:
+      solution: $(Solution)
+      configuration: $(Configuration)
+      platform: $(Platform)
+      msbuildArgs: /p:RunCodeAnalysis=true /p:TreatWarningsAsErrors=true "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\build.log"
+      maximumCpuCount: true
+
+  - task: VSTest@2
+    displayName: Test solution
+    inputs:
+      testAssemblyVer2: |
+        **\$(Configuration)\*test*.dll
+        !**\obj\**
+      configuration: $(Configuration)
+      platform: $(Platform)
+      codeCoverageEnabled: true
+      runInParallel: true
+
+  - powershell: |
+      If (-Not (Test-Path -Path $env:OUTDIR -PathType Container)) { $null = New-Item -Path $env:OUTDIR -Type Directory }
+      Compress-Archive -Path LICENSE.txt, "${env:SRCDIR}\*.dll", "${env:SRCDIR}\*.dll-Help.xml", "${env:SRCDIR}\about_*.help.txt", "${env:SRCDIR}\VSSetup.*" -DestinationPath "${env:OUTDIR}\VSSetup.zip"
+    displayName: Archive output
+    env:
+      CONFIGURATION: $(Configuration)
+      OUTDIR: $(Build.BinariesDirectory)\bin\$(Configuration)
+      SRCDIR: src\VSSetup.PowerShell\bin\$(Configuration)
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - task: NuGetCommand@2
+    displayName: Package output
+    inputs:
+      command: pack
+      basePath: $(Build.SourcesDirectory)
+      packDestination: $(Build.BinariesDirectory)\bin\$(Configuration)
+      packagesToPack: pkg\VSSetup\VSSetup.nuspec
+      configuration: $(Configuration)
+      versioningScheme: byEnvVar
+      versionEnvVar: GitBuildVersionSimple
+      includeSymbols: true
+      buildProperties: CommitId=$(Build.SourceVersion)
+
+  - task: VSBuild@1
+    displayName: Sign package
+    condition: and(succeeded(), eq(variables['Configuration'], 'Release'))
+    inputs:
+      solution: pkg\VSSetup\VSSetup.signproj
+      configuration: $(Configuration)
+      platform: $(Platform)
+      msbuildArgs: /p:OutDir=$(Build.BinariesDirectory)\bin\$(Configuration) "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\sign.log"
+
+  - task: MicroBuildCodesignVerify@1
+    displayName: Validate package
+    condition: and(succeeded(), eq(variables['Configuration'], 'Release'))
+    inputs:
+      ExcludeSNVerify: true
+      TargetFolder: $(Build.BinariesDirectory)\bin\$(Configuration)
+      WhiteListPathForCerts: build\nosign.txt
+
+  - task: CopyFiles@2
+    displayName: Copy output
+    inputs:
+      SourceFolder: $(Build.BinariesDirectory)
+      Contents: bin\$(Configuration)\**
+      TargetFolder: $(Build.ArtifactStagingDirectory)\drop
+
+  - task: CopyFiles@2
+    displayName: Copy tools
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)
+      Contents: tools\**
+      TargetFolder: $(Build.ArtifactStagingDirectory)\drop
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish drop
+    inputs:
+      ArtifactName: drop
+      PathtoPublish: $(Build.ArtifactStagingDirectory)\drop
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish logs
+    condition: succeededOrFailed()
+    continueOnError: true
+    inputs:
+      ArtifactName: logs
+      PathtoPublish: $(Build.ArtifactStagingDirectory)\logs
+
+  - task: MicroBuildCleanup@1
+    displayName: Clean up
+    condition: succeededOrFailed()
+
+# vim: set ai et st=2 sts=2 sw=2:
