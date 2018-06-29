@@ -9,13 +9,22 @@ Description = 'Visual Studio Setup PowerShell Module'
 ModuleVersion = '$BuildVersion$'
 PowerShellVersion = '2.0'
 CLRVersion = '2.0'
-ModuleToProcess = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
-RequiredAssemblies = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
+ModuleToProcess = 'VSSetup.psm1'
+NestedModules = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
+RequiredAssemblies = @(
+  'Microsoft.VisualStudio.Setup.PowerShell.dll',
+  'Microsoft.VisualStudio.Setup.Configuration.Interop.dll'
+)
+CmdletsToExport = @(
+  'Get-VSSetupInstance'
+  'Select-VSSetupInstance'
+)
 TypesToProcess = 'VSSetup.types.ps1xml'
 PrivateData = @{
   PSData = @{
     ProjectUri = 'https://github.com/Microsoft/vssetup.powershell'
     LicenseUri = 'https://github.com/Microsoft/vssetup.powershell/raw/$CommitId$/LICENSE.txt'
+    Prerelease = '$Prerelease$'
   }
 }
 }

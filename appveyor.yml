@@ -1,3 +1,6 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
 configuration:
   - Debug
   - Release
@@ -37,10 +40,12 @@ build:
   parallel: true
 
 after_build:
+  - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\LICENSE.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\*.dll-Help.xml
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\about_*.help.txt
   - 7z a bin\%CONFIGURATION%\VSSetup.zip %APPVEYOR_BUILD_FOLDER%\src\VSSetup.PowerShell\bin\%CONFIGURATION%\VSSetup.*
+  - nuget pack -BasePath "%APPVEYOR_BUILD_FOLDER%" -OutputDirectory "bin\%CONFIGURATION%" -Version "%GitBuildVersionSimple%" -Properties "Configuration=%CONFIGURATION%;CommitId=%APPVEYOR_REPO_COMMIT%" pkg\VSSetup\VSSetup.nuspec
 
 test_script:
   - tools\test.cmd -v
@@ -49,35 +54,37 @@ artifacts:
   - path: bin\$(configuration)\VSSetup.zip
     name: VSSetup
 
-  - path: src\VSSetup\bin\$(configuration)\*.nupkg
+  - path: bin\$(configuration)\*.nupkg
     name: package
 
 deploy:
   - provider: GitHub
+    description: 'Prerelease of version $(appveyor_build_version)'
+    prerelease: true
     auth_token:
-      secure: 5K94QY8dHKlbjvlBpQaXwAkmDf+LQE3g5WlU9snnNMjDjf0UT4xDoOBCLWcmwZOm
+      secure: OQYrPN9oRtZHmy6BthAD7WrNdNMIhjOj5J+1YO96vnYnAhQ3ZRTGg0naaAlUsvpW
     artifact: VSSetup
     on:
-      branch: master
+      branch: develop
       configuration: Release
 
   - provider: NuGet
     server: https://powershellgallery.com
     api_key:
-      secure: 4STrzCp6wDsDBj/wCtmImMVL7wUI8DCGjdMBXGqQf9JZJ8LjmW5YSY8wtcHAv0XW
+      secure: zlSsf1CjcEIqOM58eGv9sOJmGL24l9sFfE+GxftIiD3bJwJKNnlwbfe1/H81TQQD
     artifact: package
     skip_symbols: true
     on:
-      branch: master
+      branch: develop
       configuration: Release
 
   - provider: NuGet
     server: https://nuget.smbsrc.net/
     api_key:
-      secure: WPxjuSouwbCdM6I771BfIbOk8gA883+l9RKUCfFknaUT1vYPmTpT2ABF9r+J0JgR
+      secure: d8ZqLghGiOFGr7Bu1x69hHKaopNtHRCmex72n6n7Ul80enJWM65tw9c1wlnXw4yP
     artifact: /.*\.symbols\.nupkg/
     on:
-      branch: master
+      branch: develop
       configuration: Release
 
 # vim: set ai et st=2 sts=2 sw=2:

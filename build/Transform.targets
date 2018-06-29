@@ -22,7 +22,7 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
       <InputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
       <OutputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
       <Expression ParameterType="System.String" Required="true" />
-      <Text ParameterType="System.String" Required="true" />
+      <Text ParameterType="System.String" />
     </ParameterGroup>
     <Task>
       <Reference Include="System.Core" />
@@ -38,6 +38,11 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
         {
           string content;
           Encoding encoding;
+
+          if (Text == null)
+          {
+            Text = string.Empty;
+          }
 
           var path = InputFiles[i].ItemSpec;
           using (var reader = new StreamReader(path, Encoding.UTF8, true))
@@ -66,9 +71,14 @@ Licensed under the MIT license. See LICENSE.txt in the project root for license 
   <!-- Simple transformation target to replace tokens without dependency on T4 -->
   <Target Name="Transform" BeforeTargets="CoreCompile" DependsOnTargets="GetBuildVersion" Inputs="@(Template)" Outputs="%(Template.OutputFilePath)">
     <Message Text="Transforming: &quot;%(Template.Identity)&quot; -> &quot;%(Template.OutputFilePath)&quot;" />
-    <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersion)">
+    <PropertyGroup Condition="'$(PublicRelease)'!='True'">
+      <Prerelease Condition="'$(PrereleaseVersion)'!=''">$(PrereleaseVersion)</Prerelease>
+      <Prerelease Condition="'$(Prerelease)'==''">-g$(GitCommitIdShort)</Prerelease>
+    </PropertyGroup>
+    <ReplaceToken InputFiles="@(Template)" OutputFiles="%(Template.OutputFilePath)" Expression="\$BuildVersion\$" Text="$(BuildVersionSimple)">
       <Output TaskParameter="OutputFiles" ItemName="FileWrites" />
     </ReplaceToken>
+    <ReplaceToken InputFiles="%(Template.OutputFilePath)" OutputFiles="%(Template.OutputFilePath)" Expression="\$Prerelease\$" Text="$(Prerelease)" />
     <ReplaceToken InputFiles="%(Template.OutputFilePath)" OutputFiles="%(Template.OutputFilePath)" Expression="\$CommitId\$" Text="$(GitCommitIdShort)" />
   </Target>
 </Project>

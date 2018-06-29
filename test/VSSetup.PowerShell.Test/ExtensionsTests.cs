@@ -6,10 +6,38 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
+    using System.Reflection;
     using Xunit;
 
     public class ExtensionsTests
     {
+        [Fact]
+        public void GetCustomAttributeT_Null_Throws()
+        {
+            Assert.Throws<ArgumentNullException>("source", () => Extensions.GetCustomAttribute<Attribute>(null));
+        }
+
+        [Fact]
+        public void GetCustomAttributeT()
+        {
+            var expected = GetType().Assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
+            Assert.Equal("Microsoft Corporation", expected);
+        }
+
+        [Fact]
+        public void GetCustomAttributesT_Null_Throws()
+        {
+            Assert.Throws<ArgumentNullException>("source", () => Extensions.GetCustomAttributes<Attribute>(null));
+        }
+
+        [Fact]
+        public void GetCustomAttributesT()
+        {
+            var attributes = GetType().Assembly.GetCustomAttributes<AssemblyCompanyAttribute>();
+            Assert.Collection(attributes, attr => Assert.Equal("Microsoft Corporation", attr.Company));
+        }
+
+        [Fact]
         public void Normalize_Null_Throws()
         {
             Assert.Throws<ArgumentNullException>("version", () => Extensions.Normalize(null));

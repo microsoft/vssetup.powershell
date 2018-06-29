@@ -1,6 +1,11 @@
 Visual Studio Setup PowerShell Module
 =====================================
 
+[![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/VisualStudioSetup/vssetup-powershell/branch/master)
+[![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
+[![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg)](https://powershellgallery.com/packages/VSSetup)
+
 This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples][samples] though those also have samples using VB and VC++.
 
 ## Installing
@@ -42,15 +47,6 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 ## Feedback
 
 To file issues or suggestions, please use the [Issues][issues] page for this project on GitHub.
-
-## Status
-
-This project uses a Git flow model releasing from the `master` branch with development based on and stabilize in the `develop` branch.
-
-Branch  | Status
-------  | ------
-master  | [![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/master)
-develop | [![build status: develop](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/develop?svg=true)](https://ci.appveyor.com/project/heaths/vssetup-powershell/branch/develop)
 
   [issues]: https://github.com/Microsoft/vssetup.powershell/issues
   [psget]: http://go.microsoft.com/fwlink/?LinkID=746217

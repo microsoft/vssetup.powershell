@@ -116,4 +116,16 @@ Describe 'Select-VSSetupInstance' {
             $instances.Count | Should Be 2
         }
     }
+
+    Context '-Product * -Require Microsoft.VisualStudio.Workload.MSBuildTools Microsoft.VisualStudio.Workload.NativeDesktop' {
+        It 'Returns 0 instances' {
+            $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Workload.MSBuildTools', 'Microsoft.VisualStudio.Workload.NativeDesktop')
+            $instances.Count | Should Be 0
+        }
+
+        It '-RequireAny returns 2 instances' {
+            $instances = @(Get-VSSetupInstance | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Workload.MSBuildTools', 'Microsoft.VisualStudio.Workload.NativeDesktop' -RequireAny)
+            $instances.Count | Should Be 2
+        }
+    }
 }

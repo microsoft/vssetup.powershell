@@ -13,7 +13,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using Configuration;
 
     /// <summary>
-    /// The Get-VSSetupInstance command.
+    /// The Select-VSSetupInstance command.
     /// </summary>
     [Cmdlet(VerbsCommon.Select, "VSSetupInstance")]
     [OutputType(typeof(Instance))]
@@ -62,6 +62,12 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         public string[] Require { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="RequireAny"/> parameter.
+        /// </summary>
+        [Parameter]
+        public SwitchParameter RequireAny { get; set; }
+
+        /// <summary>
         /// Gets or sets the Version parameter.
         /// </summary>
         [Parameter]
@@ -106,10 +112,20 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
 
             if (Require != null && Require.Any())
             {
-                // Select instances that contain all specified package IDs.
+                // Select instances that contain the specified package IDs.
+                bool Contains(IEnumerable<PackageReference> packages, Func<PackageReference, string> selector)
+                {
+                    if (RequireAny)
+                    {
+                        return packages.ContainsAny(selector, Require, StringComparer.OrdinalIgnoreCase);
+                    }
+
+                    return packages.ContainsAll(selector, Require, StringComparer.OrdinalIgnoreCase);
+                }
+
                 instances = from instance in instances
                             let instancePackages = instance?.Packages
-                            where instancePackages != null && instancePackages.ContainsAll(package => package.Id, Require, StringComparer.OrdinalIgnoreCase)
+                            where instancePackages != null && Contains(instancePackages, package => package.Id)
                             select instance;
             }
 
@@ -121,6 +137,12 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                             let version = helper.ParseVersion(instanceVersion)
                             where minVersion <= version && version <= maxVersion
                             select instance;
+            }
+
+            if (Latest)
+            {
+                // Sort by the InstallationVersion then InstallDate so we can easily find the latest.
+                instances = instances.OrderBy(instance => instance, InstanceComparer.VersionAndDate);
             }
 
             foreach (var instance in instances)

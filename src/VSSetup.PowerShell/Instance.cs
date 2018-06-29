@@ -67,7 +67,7 @@ namespace Microsoft.VisualStudio.Setup
                 () =>
                 {
                     var versionString = instance.GetInstallationVersion();
-                    if (Utilities.TryParseVersion(versionString, out Version version))
+                    if (Utilities.TryParseVersion(versionString, out var version))
                     {
                         return version.Normalize();
                     }
@@ -94,19 +94,13 @@ namespace Microsoft.VisualStudio.Setup
             Utilities.TrySet(
                 ref displayName,
                 nameof(DisplayName),
-                () =>
-                {
-                    return instance.GetDisplayName(lcid);
-                },
+                () => instance.GetDisplayName(lcid),
                 OnError);
 
             Utilities.TrySet(
                 ref description,
                 nameof(Description),
-                () =>
-                {
-                    return instance.GetDescription(lcid);
-                },
+                () => instance.GetDescription(lcid),
                 OnError);
 
             Utilities.TrySet(

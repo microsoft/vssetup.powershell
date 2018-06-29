@@ -1,5 +1,6 @@
 ---
 external help file: Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml
+Module Name: VSSetup
 online version: https://github.com/Microsoft/vssetup.powershell/raw/master/docs/VSSetup/Select-VSSetupInstance.md
 schema: 2.0.0
 ---
@@ -12,8 +13,8 @@ Selects instances of Visual Studio and related products based on criteria.
 ## SYNTAX
 
 ```
-Select-VSSetupInstance [-Instance] <Instance[]> [-Product <String[]>] [-Require <String[]>] [-Version <String>]
- [-Latest] [<CommonParameters>]
+Select-VSSetupInstance [-Instance] <Instance[]> [-Product <String[]>] [-Require <String[]>] [-RequireAny]
+ [-Version <String>] [-Latest] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +44,7 @@ One or more instances from which to select.
 ```yaml
 Type: Instance[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -58,7 +59,7 @@ Select the most recently installed instance with the highest version (within the
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -73,7 +74,7 @@ One or more products to select. Wildcards are supported.
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -88,7 +89,22 @@ One or more workloads or components to select. All requirements specified must b
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RequireAny
+Change the behavior of -Require such that any one or more requirements specified must be met.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -103,7 +119,7 @@ A version range to limit results. A single version like '15.0' is equivalent to 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -124,3 +140,7 @@ One or more instances from which to select.
 
 ### Microsoft.VisualStudio.Setup.Instance
 Zero or more instances that met specified criteria.
+
+## NOTES
+
+## RELATED LINKS
