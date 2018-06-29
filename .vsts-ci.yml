@@ -103,7 +103,7 @@ phases:
       buildProperties: CommitId=$(Build.SourceVersion)
 
   - task: VSBuild@1
-    displayName: Sign package
+    displayName: Sign packages
     condition: and(succeeded(), eq(variables['Configuration'], 'Release'))
     inputs:
       solution: pkg\VSSetup\VSSetup.signproj
@@ -112,7 +112,7 @@ phases:
       msbuildArgs: /p:OutDir=$(Build.BinariesDirectory)\bin\$(Configuration) "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\sign.log"
 
   - task: MicroBuildCodesignVerify@1
-    displayName: Validate package
+    displayName: Validate packages
     condition: and(succeeded(), eq(variables['Configuration'], 'Release'))
     inputs:
       ExcludeSNVerify: true
@@ -121,6 +121,13 @@ phases:
 
   - task: CopyFiles@2
     displayName: Copy output
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)\src
+      Contents: '**\bin\$(Configuration)\**'
+      TargetFolder: $(Build.ArtifactStagingDirectory)\drop
+
+  - task: CopyFiles@2
+    displayName: Copy packages
     inputs:
       SourceFolder: $(Build.BinariesDirectory)
       Contents: bin\$(Configuration)\**
