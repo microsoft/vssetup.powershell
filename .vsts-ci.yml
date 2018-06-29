@@ -124,7 +124,7 @@ phases:
     inputs:
       SourceFolder: $(Build.SourcesDirectory)\src
       Contents: '**\bin\$(Configuration)\**'
-      TargetFolder: $(Build.ArtifactStagingDirectory)\drop
+      TargetFolder: $(Build.ArtifactStagingDirectory)\drop\src
 
   - task: CopyFiles@2
     displayName: Copy packages
