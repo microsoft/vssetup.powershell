@@ -21,7 +21,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
         /// Initializes a new instance of the <see cref="VersionTable"/> class.
         /// </summary>
         public VersionTable()
-            : base("VSSetupVersionTable", null, ScopedItemOptions.Constant)
+            : base("VSSetupVersionTable", null, ScopedItemOptions.None)
         {
             properties = new Lazy<Hashtable>(() =>
             {
