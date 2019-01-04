@@ -1,7 +1,8 @@
 Visual Studio Setup PowerShell Module
 =====================================
 
-[![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/VisualStudioSetup/vssetup-powershell/branch/master)
+![build status: master](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/Setup/Setup-VSSetup.PowerShell-CI?branchName=master&label=master)
+[![build status: develop](https://dev.azure.com/azure-public/vssetup/_apis/build/status/Microsoft.vssetup.powershell?branchName=develop&label=develop)](https://dev.azure.com/azure-public/vssetup/_build/latest?definitionId=23?branchName=develop)
 [![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
 [![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg)](https://powershellgallery.com/packages/VSSetup)

@@ -12,8 +12,11 @@ param (
     [string] $Platform = $env:PLATFORM,
 
     [Parameter()]
-    [ValidateSet('Unit', 'Integration')]
-    [string[]] $Type = @('Unit', 'Integration')
+    [ValidateSet('Unit', 'Integration', 'Functional', 'Runtime')]
+    [string[]] $Type = @('Functional', 'Runtime'),
+
+    [Parameter()]
+    [switch] $Download
 )
 
 if (-not $Configuration) {
@@ -26,7 +29,7 @@ if (-not $Platform) {
 
 [bool] $Failed = $false
 
-if ($Type -contains 'Unit')
+if ($Type -contains 'Unit' -or $Type -contains 'Functional')
 {
     # Find vstest.console.exe.
     $cmd = get-command vstest.console.exe -ea SilentlyContinue | select-object -expand Path
@@ -51,12 +54,6 @@ if ($Type -contains 'Unit')
         exit 1
     }
 
-    # Set up logger for AppVeyor.
-    $logger = if ($env:APPVEYOR -eq 'true') {
-        write-verbose 'Using AppVeyor logger when running in an AppVeyor build.'
-        '/logger:appveyor'
-    }
-
     # Discover test assemblies for the current configuration.
     $assemblies = get-childitem test -include *.test.dll -recurse | where-object {
         $_.fullname -match "\\bin\\$Configuration\\"
@@ -74,16 +71,17 @@ if ($Type -contains 'Unit')
     }
 }
 
-if ($Type -contains 'Integration')
+if ($Type -contains 'Integration' -or $Type -contains 'Runtime')
 {
-    # Run docker integration tests.
-    if (get-command docker-compose -ea SilentlyContinue) {
-        [string] $path = if ($env:APPVEYOR -eq 'true') {
-            $no_tty = '-T'
-            resolve-path "$PSScriptRoot\..\docker\appveyor\docker-compose.yml"
-        } else {
-            resolve-path "$PSScriptRoot\..\docker\docker-compose.yml"
-        }
+    # Run docker runtime tests.
+    $cmd = (get-command docker-compose -ea SilentlyContinue).Path
+    if (-not $cmd -and $Download) {
+        invoke-webrequest 'https://github.com/docker/compose/releases/download/1.11.2/docker-compose-Windows-x86_64.exe' -outfile "${env:TEMP}\docker-compose.exe"
+        $cmd = "${env:TEMP}\docker-compose.exe"
+    }
+
+    if ($cmd) {
+        [string] $path = resolve-path "$PSScriptRoot\..\docker\docker-compose.yml"
 
         $verbose = if ($VerbosePreference -eq 'Continue') {
             '--verbose'
@@ -98,7 +96,7 @@ if ($Type -contains 'Integration')
 
         write-verbose "Running tests in '$path'"
         try {
-            docker-compose -f "$path" $verbose run $no_tty --rm test -c Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
+            & $cmd -f "$path" $verbose run --rm test
             if (-not $?) {
                 $Failed = $true
             }
@@ -106,15 +104,8 @@ if ($Type -contains 'Integration')
             $env:CONFIGURATION = $OldConfiguration
             $env:PLATFORM = $OldPlatform
         }
-
-        if ($env:APPVEYOR_JOB_ID) {
-            [string] $path = resolve-path "$PSScriptRoot\..\docker\Tests\Results.xml"
-            $url = "https://ci.appveyor.com/api/testresults/nunit/${env:APPVEYOR_JOB_ID}"
-
-            write-verbose "Uploading '$path' to '$url'"
-            $wc = new-object System.Net.WebClient
-            $wc.UploadFile($url, $path)
-        }
+    } else {
+        write-warning 'Failed to find docker-compose; integration tests will not be performed.'
     }
 
     if ($Failed) {

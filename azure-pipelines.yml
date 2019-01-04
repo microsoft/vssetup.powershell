@@ -1,0 +1,24 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - develop
+
+pr:
+  branches:
+    include:
+      - master
+      - develop
+
+pool:
+  vmImage: vs2017-win2016
+
+steps:
+- template: build/build.yml
+  parameters:
+      BuildConfiguration: $(BuildConfiguration)
+      BuildPlatform: $(BuildPlatform)
+      Docker: true

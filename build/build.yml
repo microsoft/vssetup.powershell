@@ -1,0 +1,148 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+parameters:
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+  Docker: false
+  Sign: false
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: Install nuget
+  inputs:
+    versionSpec: '4.4.1'
+
+- task: NuGetCommand@2
+  displayName: Restore nuget packages
+
+- powershell: |
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
+  displayName: Install PowerShell modules
+
+- powershell: |
+    New-ExternalHelp -Path docs\VSSetup -OutputPath "src\VSSetup.PowerShell\bin\${env:CONFIGURATION}" -Force
+  displayName: Compile documentation
+  env:
+    CONFIGURATION: ${{ parameters.BuildConfiguration }}
+  workingDirectory: $(Build.SourcesDirectory)
+
+- task: VSBuild@1
+  displayName: Build solution
+  inputs:
+    configuration: ${{ parameters.BuildConfiguration }}
+    platform: ${{ parameters.BuildPlatform }}
+    msbuildArgs: /p:RunCodeAnalysis=true /p:TreatWarningsAsErrors=true "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\build.log"
+    maximumCpuCount: true
+
+- task: VSTest@2
+  displayName: Functional tests
+  inputs:
+    testAssemblyVer2: |
+      **\${{ parameters.BuildConfiguration }}\*test*.dll
+      !**\obj\**
+    configuration: ${{ parameters.BuildConfiguration }}
+    platform: ${{ parameters.BuildPlatform }}
+    codeCoverageEnabled: true
+    runInParallel: true
+
+- ${{ if eq(parameters.Docker, 'true') }}:
+  # Make sure service images are rebuilt if Dockerfiles changed.
+  - task: DockerCompose@0
+    displayName: Build images
+    inputs:
+      dockerComposeFile: docker/docker-compose.yml
+      action: Build services
+    env:
+      CONFIGURATION: ${{ parameters.BuildConfiguration }}
+
+  - task: DockerCompose@0
+    displayName: Runtime tests
+    inputs:
+      dockerComposeFile: docker/docker-compose.yml
+      action: Run a specific service
+      serviceName: test
+      containerCommand: -Command Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
+      detached: false
+    env:
+      CONFIGURATION: ${{ parameters.BuildConfiguration }}
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    inputs:
+      buildConfiguration: ${{ parameters.BuildConfiguration }}
+      buildPlatform: ${{ parameters.BuildPlatform }}
+      testRunTitle: Runtime tests (${{ parameters.BuildConfiguration }}|${{ parameters.BuildPlatform }})
+      testResultsFormat: NUnit
+      testResultsFiles: '**\*Results.xml'
+      searchFolder: $(Build.SourcesDirectory)\docker\Tests
+      mergeTestResults: true
+    condition: succeededOrFailed()
+
+- powershell: |
+    If (-Not (Test-Path -Path $env:OUTDIR -PathType Container)) { $null = New-Item -Path $env:OUTDIR -Type Directory }
+    Compress-Archive -Path LICENSE.txt, "${env:SRCDIR}\*.dll", "${env:SRCDIR}\*.dll-Help.xml", "${env:SRCDIR}\about_*.help.txt", "${env:SRCDIR}\VSSetup.*" -DestinationPath "${env:OUTDIR}\VSSetup.zip"
+  displayName: Archive output
+  env:
+    CONFIGURATION: ${{ parameters.BuildConfiguration }}
+    OUTDIR: $(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }}
+    SRCDIR: src\VSSetup.PowerShell\bin\${{ parameters.BuildConfiguration }}
+  workingDirectory: $(Build.SourcesDirectory)
+
+- task: NuGetCommand@2
+  displayName: Package output
+  inputs:
+    command: pack
+    basePath: $(Build.SourcesDirectory)
+    packDestination: $(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }}
+    packagesToPack: pkg\VSSetup\VSSetup.nuspec
+    configuration: ${{ parameters.BuildConfiguration }}
+    versioningScheme: byEnvVar
+    versionEnvVar: GitBuildVersionSimple
+    includeSymbols: true
+    buildProperties: CommitId=$(Build.SourceVersion)
+
+- ${{ if eq(parameters.Sign, 'true') }}:
+  - task: VSBuild@1
+    displayName: Sign packages
+    inputs:
+      solution: pkg\VSSetup\VSSetup.signproj
+      configuration: ${{ parameters.BuildConfiguration }}
+      platform: ${{ parameters.BuildPlatform }}
+      msbuildArgs: /p:OutDir=$(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }} "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\sign.log"
+
+  - task: MicroBuildCodesignVerify@1
+    displayName: Validate packages
+    inputs:
+      ExcludeSNVerify: true
+      TargetFolder: $(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }}
+      WhiteListPathForCerts: build\nosign.txt
+
+- task: CopyFiles@2
+  displayName: Copy output
+  inputs:
+    SourceFolder: $(Build.SourcesDirectory)\src
+    Contents: '**\bin\${{ parameters.BuildConfiguration }}\**'
+    TargetFolder: $(Build.ArtifactStagingDirectory)\drop\src
+
+- task: CopyFiles@2
+  displayName: Copy packages
+  inputs:
+    SourceFolder: $(Build.BinariesDirectory)
+    Contents: bin\${{ parameters.BuildConfiguration }}\**
+    TargetFolder: $(Build.ArtifactStagingDirectory)\drop
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish drop
+  inputs:
+    ArtifactName: drop
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\drop
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish logs
+  condition: succeededOrFailed()
+  continueOnError: true
+  inputs:
+    ArtifactName: logs
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\logs
