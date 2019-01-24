@@ -99,9 +99,9 @@ steps:
     packagesToPack: pkg\VSSetup\VSSetup.nuspec
     configuration: ${{ parameters.BuildConfiguration }}
     versioningScheme: byEnvVar
-    versionEnvVar: GitBuildVersionSimple
+    versionEnvVar: NBGV_NuGetPackageVersion
     includeSymbols: true
-    buildProperties: CommitId=$(Build.SourceVersion)
+    buildProperties: CommitId=$(Build.SourceVersion);Tag=$(Build.BuildNumber)
 
 - ${{ if eq(parameters.Sign, 'true') }}:
   - task: VSBuild@1
