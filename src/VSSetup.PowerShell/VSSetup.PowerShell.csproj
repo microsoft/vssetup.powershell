@@ -112,7 +112,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.props'))" />
     <Error Condition="!Exists('..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.2.1.58\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.2.1.58\build\Nerdbank.GitVersioning.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.2.3.38\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.2.3.38\build\Nerdbank.GitVersioning.targets'))" />
   </Target>
   <Target Name="PopulateFilesToSign" AfterTargets="AfterBuild" BeforeTargets="SignFiles">
     <ItemGroup>
@@ -125,5 +125,5 @@
     </ItemGroup>
   </Target>
   <Import Project="..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.targets" Condition="Exists('..\..\packages\MicroBuild.Core.0.3.0\build\MicroBuild.Core.targets')" />
-  <Import Project="..\..\packages\Nerdbank.GitVersioning.2.1.58\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.2.1.58\build\Nerdbank.GitVersioning.targets')" />
+  <Import Project="..\..\packages\Nerdbank.GitVersioning.2.3.38\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.2.3.38\build\Nerdbank.GitVersioning.targets')" />
 </Project>

@@ -3,9 +3,9 @@ Visual Studio Setup PowerShell Module
 
 ![build status: master](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/Setup/Setup-VSSetup.PowerShell-CI?branchName=master&label=master)
 [![build status: develop](https://dev.azure.com/azure-public/vssetup/_apis/build/status/Microsoft.vssetup.powershell?branchName=develop&label=develop)](https://dev.azure.com/azure-public/vssetup/_build/latest?definitionId=23?branchName=develop)
-[![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
-[![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
-[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg)](https://powershellgallery.com/packages/VSSetup)
+[![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github&logoColor=white)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
+[![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&logoColor=white&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg?logo=powershell&logoColor=white&label=gallery)](https://powershellgallery.com/packages/VSSetup)
 
 This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples][samples] though those also have samples using VB and VC++.
 

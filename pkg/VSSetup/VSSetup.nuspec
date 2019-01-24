@@ -14,7 +14,7 @@
     <summary>Visual Studio Setup PowerShell Module</summary>
     <copyright>Copyright (C) Microsoft Corporation. All rights reserved.</copyright>
     <tags>PSModule PSIncludes_Cmdlet PSCmdlet_Get-VSSetupInstance PSCmdlet_Select-VSSetupInstance PSCommand_Get-VSSetupInstance PSCommand_Select-VSSetupInstance</tags>
-    <releaseNotes>https://github.com/Microsoft/vssetup.powershell/releases/tag/$Version$</releaseNotes>
+    <releaseNotes>https://github.com/Microsoft/vssetup.powershell/releases/tag/$Tag$</releaseNotes>
   </metadata>
   <files>
     <file src="LICENSE.txt" target="tools\"/>
