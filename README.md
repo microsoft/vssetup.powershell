@@ -49,6 +49,14 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 
 To file issues or suggestions, please use the [Issues][issues] page for this project on GitHub.
 
+## License
+
+This project is licensed under the [MIT license](LICENSE.txt).
+
+## Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
   [issues]: https://github.com/Microsoft/vssetup.powershell/issues
   [psget]: http://go.microsoft.com/fwlink/?LinkID=746217
   [releases]: https://github.com/Microsoft/vssetup.powershell/releases
