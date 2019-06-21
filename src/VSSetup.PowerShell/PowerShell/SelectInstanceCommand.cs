@@ -149,10 +149,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             {
                 if (Latest)
                 {
-                    if (latestInstance == null || latestInstance.InstallDate < instance.InstallDate)
-                    {
-                        latestInstance = instance;
-                    }
+                   latestInstance = instance;
                 }
                 else
                 {
