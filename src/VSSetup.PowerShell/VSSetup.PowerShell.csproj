@@ -117,7 +117,7 @@
   <Target Name="PopulateFilesToSign" AfterTargets="AfterBuild" BeforeTargets="SignFiles">
     <ItemGroup>
       <FilesToSign Include="$(TargetPath)">
-        <Authenticode>Microsoft</Authenticode>
+        <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
       <FilesToSign Include="$(TargetDir)\*.ps1xml;$(TargetDir)\*.psd1;$(TargetDir)\*.psm1">
         <Authenticode>Microsoft400</Authenticode>
