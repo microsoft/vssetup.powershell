@@ -45,6 +45,8 @@ namespace Microsoft.VisualStudio.Setup
                 new object[] { Mock(v1), Mock(v1), 0 },
                 new object[] { Mock(v1), Mock(v2), -1 },
                 new object[] { Mock(v2), Mock(v1), 1 },
+                new object[] { Mock(v1, ft2), Mock(v2, ft1), -1 },
+                new object[] { Mock(v2, ft1), Mock(v1, ft2), 1 },
                 new object[] { Mock(v2, ft1), Mock(v2, ft2), -1 },
                 new object[] { Mock(v2, ft2), Mock(v2, ft1), 1 },
             };

@@ -1,10 +1,11 @@
 Visual Studio Setup PowerShell Module
 =====================================
 
-[![build status: master](https://ci.appveyor.com/api/projects/status/4c1feyut6rvmw1dk/branch/master?svg=true)](https://ci.appveyor.com/project/VisualStudioSetup/vssetup-powershell/branch/master)
-[![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
-[![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
-[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg)](https://powershellgallery.com/packages/VSSetup)
+![build status: master](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/Setup/Setup-VSSetup.PowerShell-CI?branchName=master&label=master)
+![build status: develop](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/Setup/Setup-VSSetup.PowerShell-CI?branchName=develop&label=develop)
+[![github release](https://img.shields.io/github/release/Microsoft/VSSetup.PowerShell.svg?logo=github&logoColor=white)](https://github.com/Microsoft/VSSetup.PowerShell/releases/latest)
+[![github releases: all](https://img.shields.io/github/downloads/Microsoft/VSSetup.PowerShell/total.svg?logo=github&logoColor=white&label=github)](https://github.com/Microsoft/VSSetup.PowerShell/releases)
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/VSSetup.svg?logo=powershell&logoColor=white&label=gallery)](https://powershellgallery.com/packages/VSSetup)
 
 This PowerShell module contains cmdlets to query instances of Visual Studio 2017 and newer. It also serves as a more useful sample of using the Setup Configuration APIs than the previously [published samples][samples] though those also have samples using VB and VC++.
 
@@ -47,6 +48,14 @@ Get-VSSetupInstance -All | Select-VSSetupInstance -Require 'Microsoft.VisualStud
 ## Feedback
 
 To file issues or suggestions, please use the [Issues][issues] page for this project on GitHub.
+
+## License
+
+This project is licensed under the [MIT license](LICENSE.txt).
+
+## Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
   [issues]: https://github.com/Microsoft/vssetup.powershell/issues
   [psget]: http://go.microsoft.com/fwlink/?LinkID=746217

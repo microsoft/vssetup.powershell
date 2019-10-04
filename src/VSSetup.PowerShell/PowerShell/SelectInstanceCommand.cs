@@ -139,20 +139,14 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
                             select instance;
             }
 
-            if (Latest)
-            {
-                // Sort by the InstallationVersion then InstallDate so we can easily find the latest.
-                instances = instances.OrderBy(instance => instance, InstanceComparer.VersionAndDate);
-            }
-
             foreach (var instance in instances)
             {
                 if (Latest)
                 {
-                    if (latestInstance == null || latestInstance.InstallDate < instance.InstallDate)
-                    {
-                        latestInstance = instance;
-                    }
+                   if (latestInstance == null || InstanceComparer.VersionAndDate.Compare(latestInstance, instance) < 0)
+                   {
+                       latestInstance = instance;
+                   }
                 }
                 else
                 {
