@@ -52,9 +52,6 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
             "Microsoft.VisualStudio.Product.Enterprise",
             "Microsoft.VisualStudio.Product.Professional",
             "Microsoft.VisualStudio.Product.Community",
-            "Microsoft.VisualStudio.Product.EnterpriseX86",
-            "Microsoft.VisualStudio.Product.ProfessionalX86",
-            "Microsoft.VisualStudio.Product.CommunityX86",
         };
 
         /// <summary>
