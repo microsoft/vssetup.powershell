@@ -23,7 +23,7 @@ steps:
   displayName: Restore nuget packages
 
 - pwsh: |
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    Install-PackageProvider -Name NuGet -Force
     Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
   displayName: Install PowerShell modules
 
