@@ -24,7 +24,7 @@ steps:
 
 - pwsh: |
     Install-PackageProvider -Name NuGet -Force
-# install platyPS to gernate help docs from markup files
+    # install platyPS to gernate help docs from markup files
     Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
   displayName: Install PowerShell modules
 
