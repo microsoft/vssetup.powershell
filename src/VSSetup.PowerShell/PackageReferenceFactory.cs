@@ -5,7 +5,7 @@
 
 namespace Microsoft.VisualStudio.Setup
 {
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Creates <see cref="PackageReference"/> or derivative classes.

@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudio.Setup
 {
     using System;
     using System.Runtime.InteropServices;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
     using Moq;
     using Xunit;
 

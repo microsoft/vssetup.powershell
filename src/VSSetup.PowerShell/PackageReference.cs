@@ -6,7 +6,7 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Represents a package reference.

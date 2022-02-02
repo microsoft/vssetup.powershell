@@ -6,7 +6,7 @@
 namespace Microsoft.VisualStudio.Setup
 {
     using System;
-    using Properties;
+    using Microsoft.VisualStudio.Setup.Properties;
 
     /// <summary>
     /// Argument validation utility methods.

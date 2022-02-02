@@ -2,6 +2,7 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 // </copyright>
+#pragma warning disable SA1314 // Type parameter names should begin with T
 
 namespace Microsoft.VisualStudio.Setup
 {
@@ -10,7 +11,7 @@ namespace Microsoft.VisualStudio.Setup
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Utility methods.
@@ -160,3 +161,4 @@ namespace Microsoft.VisualStudio.Setup
         }
     }
 }
+#pragma warning restore SA1314 // Type parameter names should begin with T
