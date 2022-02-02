@@ -23,6 +23,9 @@ namespace Microsoft.VisualStudio.Setup
             this.handle = handle;
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="Module"/> class.
+        /// </summary>
         ~Module()
         {
             Dispose(false);

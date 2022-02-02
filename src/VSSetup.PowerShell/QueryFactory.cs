@@ -9,6 +9,9 @@ namespace Microsoft.VisualStudio.Setup
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.Setup.Configuration;
 
+    /// <summary>
+    /// Factory class used to create instances of <see cref="ISetupConfiguration2"/>.
+    /// </summary>
     internal static class QueryFactory
     {
         /// <summary>

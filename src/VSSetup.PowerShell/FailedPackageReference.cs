@@ -5,6 +5,7 @@
 
 namespace Microsoft.VisualStudio.Setup
 {
+    using System;
     using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
