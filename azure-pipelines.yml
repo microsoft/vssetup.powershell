@@ -13,9 +13,7 @@ pr:
     - README.md
 
 pool:
-  name: AzurePipelines-EO
-  demands:
-          - ImageOverride -equals AzurePipelinesWindows2022compliant
+  vmImage: windows-2019
 
 steps:
 - template: build/build.yml
