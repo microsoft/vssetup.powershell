@@ -13,7 +13,9 @@ pr:
     - README.md
 
 pool:
-  vmImage: vs2017-win2016
+  name: AzurePipelines-EO
+  demands:
+          - ImageOverride -equals AzurePipelinesWindows2022compliant
 
 steps:
 - template: build/build.yml
