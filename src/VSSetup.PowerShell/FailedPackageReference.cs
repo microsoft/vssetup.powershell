@@ -5,7 +5,8 @@
 
 namespace Microsoft.VisualStudio.Setup
 {
-    using Configuration;
+    using System;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Represents a failed package reference.

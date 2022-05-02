@@ -52,6 +52,9 @@ namespace Microsoft.VisualStudio.Setup
         /// </summary>
         public ICollection<TValue> Values => dictionary.Values;
 
+        /// <summary>
+        /// Gets a value indicating whether collection is read only. Always returns true since this is a read only collection.
+        /// </summary>
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => true;
 
         /// <summary>
@@ -66,30 +69,43 @@ namespace Microsoft.VisualStudio.Setup
             set { throw new NotSupportedException(); }
         }
 
+        /// <summary>
+        /// Unsupported, this is read only so this will always throw <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <param name="item">Item to add.</param>
+        /// <exception cref="NotSupportedException"> will always throw since this method is not supported.</exception>
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
             throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Unsupported, this is read only so this will always throw <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <param name="key">key of value to add.</param>
+        /// <param name="value">value to add with key.</param>
+        /// <exception cref="NotSupportedException"> will always throw since this method is not supported.</exception>
         void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
         {
             throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Unsupported, this is read only so this will always throw <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <exception cref="NotSupportedException"> will always throw since this method is not supported.</exception>
         void ICollection<KeyValuePair<TKey, TValue>>.Clear()
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item) => dictionary.Contains(item);
 
-        /// <summary>
-        /// Determines whether the dictionary contains an element that has the specified key.
-        /// </summary>
-        /// <param name="key">The key to locate in the dictionary.</param>
-        /// <returns>true if the dictionary contains an element that has the specified key; otherwise, false.</returns>
+        /// <inheritdoc/>
         public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
 
+        /// <inheritdoc/>
         void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => dictionary.CopyTo(array, arrayIndex);
 
         /// <summary>
@@ -98,11 +114,23 @@ namespace Microsoft.VisualStudio.Setup
         /// <returns>An enumerator that can be used to iterate through the read-only dictionary.</returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => dictionary.GetEnumerator();
 
+        /// <summary>
+        /// Unsupported, this is read only so this will always throw <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <param name="item">item to remove.</param>
+        /// <returns>false.</returns>
+        /// <exception cref="NotSupportedException"> will always throw since this method is not supported.</exception>
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
             throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Unsupported, this is read only so this will always throw <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <param name="key">key of value to remove.</param>
+        /// <returns>false.</returns>
+        /// <exception cref="NotSupportedException"> will always throw since this method is not supported.</exception>
         bool IDictionary<TKey, TValue>.Remove(TKey key)
         {
             throw new NotSupportedException();
@@ -116,6 +144,7 @@ namespace Microsoft.VisualStudio.Setup
         /// <returns>true if the read-only dictionary contains an element with the specified key; otherwise, false.</returns>
         public bool TryGetValue(TKey key, out TValue value) => dictionary.TryGetValue(key, out value);
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using System.Linq;
     using System.Management.Automation;
     using System.Text.RegularExpressions;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// The Select-VSSetupInstance command.

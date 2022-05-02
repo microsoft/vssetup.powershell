@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudio.Setup
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Represents an instance of an installed product.

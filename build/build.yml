@@ -8,7 +8,7 @@ parameters:
   Sign: false
 
 steps:
-- powershell: |
+- pwsh: |
     dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" nbgv
     $version = & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" get-version --variable SemVer1
     & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" cloud --version $version
@@ -22,12 +22,11 @@ steps:
 - task: NuGetCommand@2
   displayName: Restore nuget packages
 
-- powershell: |
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+- pwsh: |
     Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
   displayName: Install PowerShell modules
 
-- powershell: |
+- pwsh: |
     New-ExternalHelp -Path docs\VSSetup -OutputPath "src\VSSetup.PowerShell\bin\${env:CONFIGURATION}" -Force
   displayName: Compile documentation
   env:
@@ -86,7 +85,7 @@ steps:
       mergeTestResults: true
     condition: succeededOrFailed()
 
-- powershell: |
+- pwsh: |
     If (-Not (Test-Path -Path $env:OUTDIR -PathType Container)) { $null = New-Item -Path $env:OUTDIR -Type Directory }
     Compress-Archive -Path LICENSE.txt, "${env:SRCDIR}\*.dll", "${env:SRCDIR}\*.dll-Help.xml", "${env:SRCDIR}\about_*.help.txt", "${env:SRCDIR}\VSSetup.*" -DestinationPath "${env:OUTDIR}\VSSetup.zip"
   displayName: Archive output

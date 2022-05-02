@@ -69,7 +69,7 @@ namespace Microsoft.VisualStudio.Setup
     }
 
 #pragma warning disable SA1201 // Elements must appear in the correct order
-
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Flags for <see cref="GetModuleHandleEx(GetModuleHandleExFlags, IntPtr, out SafeHandle)"/>.
     /// </summary>
@@ -81,6 +81,6 @@ namespace Microsoft.VisualStudio.Setup
         /// </summary>
         FromAddress = 4,
     }
-
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
 #pragma warning restore SA1201 // Elements must appear in the correct order
 }

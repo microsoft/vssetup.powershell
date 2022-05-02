@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     {
         [Theory]
         [InlineData("invalid", false)]
-        [InlineData("1", "false")]
+        [InlineData("1", false)]
         [InlineData("1.0", true)]
         [InlineData("1.20.300", true)]
         [InlineData("1.20.300.4000", true)]

@@ -10,8 +10,8 @@ namespace Microsoft.VisualStudio.Setup.PowerShell
     using System.Linq;
     using System.Management.Automation;
     using System.Runtime.InteropServices;
-    using Configuration;
-    using Properties;
+    using Microsoft.VisualStudio.Setup.Configuration;
+    using Microsoft.VisualStudio.Setup.Properties;
 
     /// <summary>
     /// The Get-VSSetupInstance command.

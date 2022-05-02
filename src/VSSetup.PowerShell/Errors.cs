@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudio.Setup
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
 
     /// <summary>
     /// Represents errors that occurred during the last install operation.
@@ -17,6 +17,10 @@ namespace Microsoft.VisualStudio.Setup
         private readonly IList<FailedPackageReference> failedPackages;
         private readonly IList<PackageReference> skippedPackages;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Errors"/> class, internal only.
+        /// </summary>
+        /// <param name="errors">errors to initialize with.</param>
         internal Errors(ISetupErrorState errors)
         {
             Validate.NotNull(errors, nameof(errors));

@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.Setup
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using Configuration;
+    using Microsoft.VisualStudio.Setup.Configuration;
     using Moq;
     using Xunit;
 
