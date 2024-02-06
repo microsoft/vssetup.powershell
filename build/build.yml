@@ -6,6 +6,7 @@ parameters:
   BuildPlatform: Any CPU
   Docker: false
   Sign: false
+  PublishArtifactTemplate: /build/templates/1es-publish-task.yml@self
 
 steps:
 - pwsh: |
@@ -138,16 +139,14 @@ steps:
     Contents: bin\${{ parameters.BuildConfiguration }}\**
     TargetFolder: $(Build.ArtifactStagingDirectory)\drop
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish drop
-  inputs:
-    ArtifactName: drop
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\drop
+- template: ${{ parameters.PublishArtifactTemplate }}
+  parameters:
+    artifactName: drop
+    path: $(Build.ArtifactStagingDirectory)\drop
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish logs
-  condition: succeededOrFailed()
-  continueOnError: true
-  inputs:
-    ArtifactName: logs
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\logs
+- template: ${{ parameters.PublishArtifactTemplate }}
+  parameters:
+    displayName: Publish logs
+    condition: succeededOrFailed()
+    artifactName: logs
+    path: $(Build.ArtifactStagingDirectory)\logs
