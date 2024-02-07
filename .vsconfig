@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "components": [
+    "Microsoft.VisualStudio.Workload.ManagedDesktop",
+    "Microsoft.Component.MSBuild",
+    "Microsoft.Net.ComponentGroup.4.6.2-4.7.1.DeveloperTools",
+    "Microsoft.Net.ComponentGroup.4.8.DeveloperTools",
+    "Microsoft.Net.Component.4.6.2.TargetingPack",
+    "Microsoft.Net.Component.4.8.SDK",
+    "Microsoft.Net.Component.4.8.TargetingPack",
+    "Microsoft.VisualStudio.Component.Git",
+    "Microsoft.VisualStudio.Component.NuGet"
+  ]
+}

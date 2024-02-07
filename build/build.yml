@@ -6,6 +6,7 @@ parameters:
   BuildPlatform: Any CPU
   Docker: false
   Sign: false
+  PublishArtifactTemplate: /build/templates/1es-publish-task.yml@self
 
 steps:
 - pwsh: |
@@ -16,8 +17,6 @@ steps:
 
 - task: NuGetToolInstaller@0
   displayName: Install nuget
-  inputs:
-    versionSpec: '4.4.1'
 
 - task: NuGetCommand@2
   displayName: Restore nuget packages
@@ -109,6 +108,11 @@ steps:
     buildProperties: CommitId=$(Build.SourceVersion);Tag=$(Build.BuildNumber)
 
 - ${{ if eq(parameters.Sign, 'true') }}:
+  - task: NuGetCommand@2
+    displayName: Restore nuget packages
+    inputs:
+      restoreSolution: $(Build.SourcesDirectory)\pkg\VSSetup\VSSetup.signproj
+
   - task: VSBuild@1
     displayName: Sign packages
     inputs:
@@ -138,16 +142,14 @@ steps:
     Contents: bin\${{ parameters.BuildConfiguration }}\**
     TargetFolder: $(Build.ArtifactStagingDirectory)\drop
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish drop
-  inputs:
-    ArtifactName: drop
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\drop
+- template: ${{ parameters.PublishArtifactTemplate }}
+  parameters:
+    artifactName: drop
+    path: $(Build.ArtifactStagingDirectory)\drop
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish logs
-  condition: succeededOrFailed()
-  continueOnError: true
-  inputs:
-    ArtifactName: logs
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\logs
+- template: ${{ parameters.PublishArtifactTemplate }}
+  parameters:
+    displayName: Publish logs
+    condition: succeededOrFailed()
+    artifactName: logs
+    path: $(Build.ArtifactStagingDirectory)\logs
