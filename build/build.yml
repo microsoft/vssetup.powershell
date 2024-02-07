@@ -108,6 +108,11 @@ steps:
     buildProperties: CommitId=$(Build.SourceVersion);Tag=$(Build.BuildNumber)
 
 - ${{ if eq(parameters.Sign, 'true') }}:
+  - task: NuGetCommand@2
+    displayName: Restore nuget packages
+    inputs:
+      restoreSolution: $(Build.SourcesDirectory)\pkg\VSSetup\VSSetup.signproj
+
   - task: VSBuild@1
     displayName: Sign packages
     inputs:
