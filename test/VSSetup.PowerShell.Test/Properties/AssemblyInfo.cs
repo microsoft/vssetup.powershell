@@ -3,21 +3,8 @@
 // Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 // </copyright>
 
-using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
-
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Visual Studio Setup PowerShell Module Tests")]
-[assembly: AssemblyDescription("Tests for the PowerShell module to interact with Visual Studio Setup")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft Corporation")]
-[assembly: AssemblyProduct("Visual Studio Setup")]
-[assembly: AssemblyCopyright("Copyright (C) Microsoft Corporation. All rights reserved.")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

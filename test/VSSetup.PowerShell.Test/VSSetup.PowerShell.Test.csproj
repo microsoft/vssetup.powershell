@@ -11,6 +11,13 @@
     <CodeAnalysisRuleSet>..\..\build\Common.ruleset</CodeAnalysisRuleSet>
     <NoWarn>$(NoWarn);CS1591;CS1762;SA1600;SA1652</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>Visual Studio Setup PowerShell Module Tests</AssemblyTitle>
+    <AssemblyDescription>Tests for the PowerShell module to interact with Visual Studio Setup</AssemblyDescription>
+    <AssemblyCompany>Microsoft Corporation</AssemblyCompany>
+    <AssemblyProduct>Visual Studio Setup</AssemblyProduct>
+    <AssemblyCopyright>Copyright (C) Microsoft Corporation. All rights reserved.</AssemblyCopyright>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" version="3.3.3" />
     <PackageReference Include="Microsoft.PowerShell.2.ReferenceAssemblies" version="1.0.0" />

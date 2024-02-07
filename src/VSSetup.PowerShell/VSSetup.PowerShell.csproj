@@ -8,6 +8,13 @@
     <TargetFramework>net35</TargetFramework>
     <CodeAnalysisRuleSet>..\..\build\Common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>Visual Studio Setup PowerShell Module</AssemblyTitle>
+    <AssemblyDescription>PowerShell module to interact with Visual Studio Setup</AssemblyDescription>
+    <AssemblyCompany>Microsoft Corporation</AssemblyCompany>
+    <AssemblyProduct>Visual Studio Setup</AssemblyProduct>
+    <AssemblyCopyright>Copyright (C) Microsoft Corporation. All rights reserved.</AssemblyCopyright>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.Setup.Configuration.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.11.2290\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
