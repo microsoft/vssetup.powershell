@@ -8,7 +8,6 @@
     <RootNamespace>Microsoft.VisualStudio.Setup</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell.Test</AssemblyName>
     <TargetFramework>net48</TargetFramework>
-    <CodeAnalysisRuleSet>..\..\build\Common.ruleset</CodeAnalysisRuleSet>
     <NoWarn>$(NoWarn);CS1591;CS1762;SA1600;SA1652</NoWarn>
   </PropertyGroup>
   <PropertyGroup>

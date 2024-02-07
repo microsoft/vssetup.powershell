@@ -6,7 +6,7 @@
     <RootNamespace>Microsoft.VisualStudio.Setup</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell</AssemblyName>
     <TargetFramework>net35</TargetFramework>
-    <CodeAnalysisRuleSet>..\..\build\Common.ruleset</CodeAnalysisRuleSet>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>Visual Studio Setup PowerShell Module</AssemblyTitle>
