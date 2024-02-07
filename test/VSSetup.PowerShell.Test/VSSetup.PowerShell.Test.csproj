@@ -9,13 +9,7 @@
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell.Test</AssemblyName>
     <TargetFramework>net48</TargetFramework>
     <NoWarn>$(NoWarn);CS1591;CS1762;SA1600;SA1652</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyTitle>Visual Studio Setup PowerShell Module Tests</AssemblyTitle>
-    <AssemblyDescription>Tests for the PowerShell module to interact with Visual Studio Setup</AssemblyDescription>
-    <AssemblyCompany>Microsoft Corporation</AssemblyCompany>
-    <AssemblyProduct>Visual Studio Setup</AssemblyProduct>
-    <AssemblyCopyright>Copyright (C) Microsoft Corporation. All rights reserved.</AssemblyCopyright>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" version="3.3.3" />

@@ -7,6 +7,7 @@ namespace Microsoft.VisualStudio.Setup
 {
     using System;
     using System.Reflection;
+    using Microsoft.VisualStudio.Setup.PowerShell;
     using Xunit;
 
     public class ExtensionsTests
@@ -20,7 +21,7 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void GetCustomAttributeT()
         {
-            var expected = GetType().Assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
+            var expected = typeof(GetInstanceCommand).Assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
             Assert.Equal("Microsoft Corporation", expected);
         }
 
@@ -33,7 +34,7 @@ namespace Microsoft.VisualStudio.Setup
         [Fact]
         public void GetCustomAttributesT()
         {
-            var attributes = GetType().Assembly.GetCustomAttributes<AssemblyCompanyAttribute>();
+            var attributes = typeof(GetInstanceCommand).Assembly.GetCustomAttributes<AssemblyCompanyAttribute>();
             Assert.Collection(attributes, attr => Assert.Equal("Microsoft Corporation", attr.Company));
         }
 

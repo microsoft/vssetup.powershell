@@ -103,5 +103,5 @@ dotnet_diagnostic.CA2242.severity = warning
 [*.{csproj,props,targets}]
 indent_size = 2
 
-[*.json]
+[*.{json,vsconfig}]
 indent_size = 2

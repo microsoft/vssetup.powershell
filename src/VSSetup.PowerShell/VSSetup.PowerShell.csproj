@@ -5,14 +5,14 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.VisualStudio.Setup</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell</AssemblyName>
-    <TargetFramework>net35</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>Visual Studio Setup PowerShell Module</AssemblyTitle>
-    <AssemblyDescription>PowerShell module to interact with Visual Studio Setup</AssemblyDescription>
-    <AssemblyCompany>Microsoft Corporation</AssemblyCompany>
-    <AssemblyProduct>Visual Studio Setup</AssemblyProduct>
-    <AssemblyCopyright>Copyright (C) Microsoft Corporation. All rights reserved.</AssemblyCopyright>
+    <Description>PowerShell module to interact with Visual Studio Setup</Description>
+    <Company>Microsoft Corporation</Company>
+    <Product>Visual Studio Setup</Product>
+    <Copyright>Copyright (C) Microsoft Corporation. All rights reserved.</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
