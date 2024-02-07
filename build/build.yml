@@ -17,8 +17,6 @@ steps:
 
 - task: NuGetToolInstaller@0
   displayName: Install nuget
-  inputs:
-    versionSpec: '4.4.1'
 
 - task: NuGetCommand@2
   displayName: Restore nuget packages
