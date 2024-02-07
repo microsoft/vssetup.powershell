@@ -6,7 +6,7 @@ services:
   test:
     build: .
     volumes:
-      - ../src/VSSetup.PowerShell/bin/${CONFIGURATION:-Debug}:C:/Users/ContainerAdministrator/Documents/WindowsPowerShell/Modules/VSSetup:ro
+      - ../src/VSSetup.PowerShell/bin/${CONFIGURATION:-Debug}/${FRAMEWORK:-net462}:C:/Users/ContainerAdministrator/Documents/WindowsPowerShell/Modules/VSSetup:ro
       - ./Instances:C:/ProgramData/Microsoft/VisualStudio/Packages/_Instances:ro
       - ./Tests:C:/Tests
       - C:/VS/Community

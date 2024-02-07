@@ -12,6 +12,10 @@ param (
     [string] $Platform = $env:PLATFORM,
 
     [Parameter()]
+    [ValidateNotNullOrEmpty()]
+    [string] $Framework = $env:FRAMEWORK,
+
+    [Parameter()]
     [ValidateSet('Unit', 'Integration', 'Functional', 'Runtime')]
     [string[]] $Type = @('Functional', 'Runtime'),
 
@@ -25,6 +29,11 @@ if (-not $Configuration) {
 
 if (-not $Platform) {
     $Platform = 'x86'
+}
+
+if (-not $Framework) {
+    $Framework = get-childitem "$PSScriptRoot\..\src\VSSetup.PowerShell\bin\$Configuration" | select-object -first 1 -expand Name
+    Write-Verbose "Using framework $Framework"
 }
 
 [bool] $Failed = $false
@@ -94,6 +103,9 @@ if ($Type -contains 'Integration' -or $Type -contains 'Runtime')
         $OldPlatform = $env:PLATFORM
         $env:PLATFORM = $Platform
 
+        $OldFramework = $env:FRAMEWORK
+        $env:FRAMEWORK = $Framework
+
         write-verbose "Running tests in '$path'"
         try {
             & $cmd -f "$path" $verbose run --rm test
@@ -103,6 +115,7 @@ if ($Type -contains 'Integration' -or $Type -contains 'Runtime')
         } finally {
             $env:CONFIGURATION = $OldConfiguration
             $env:PLATFORM = $OldPlatform
+            $env:FRAMEWORK = $OldFramework
         }
     } else {
         write-warning 'Failed to find docker-compose; integration tests will not be performed.'
@@ -130,6 +143,10 @@ otherwise, "Debug" if the environment variable is not set.
 .PARAMETER Platform
 Set the build platform. Defaults to the $env:PLATFORM environment variable;
 otherwise, "x86" if the environment variable is not set.
+
+.PARAMETER Framework
+Set the target .NET framework. Defaults to $env:FRAMEWORK environment variable;
+otherwise, the first subdirectory of the build output directory if the environment variable is not set.
 
 .PARAMETER Type
 Specify the type of tests to run. Values include "unit" and "integration".
