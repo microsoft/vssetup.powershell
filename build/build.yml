@@ -121,12 +121,12 @@ steps:
       platform: ${{ parameters.BuildPlatform }}
       msbuildArgs: /p:OutDir=$(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }} "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\sign.log"
 
-  - task: MicroBuildCodesignVerify@1
+  - task: MicroBuildCodesignVerify@3
     displayName: Validate packages
     inputs:
       ExcludeSNVerify: true
-      TargetFolder: $(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }}
-      WhiteListPathForCerts: build\nosign.txt
+      TargetFolders: $(Build.BinariesDirectory)\bin\${{ parameters.BuildConfiguration }}
+      ApprovalListPathForCerts: build\nosign.txt
 
 - task: CopyFiles@2
   displayName: Copy output
