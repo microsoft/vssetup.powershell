@@ -3,7 +3,6 @@
 
 variables:
 - group: vssetup-apiscan
-- group: vssetup-apiscan-secrets
 - name: BuildConfiguration
   value: Release
 - name: TeamName
