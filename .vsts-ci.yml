@@ -13,6 +13,9 @@ trigger:
 
 pr: none
 
+variables:
+  SignType: Real
+
 resources:
   repositories:
     - repository: MicroBuildTemplate
@@ -49,6 +52,7 @@ extends:
                   enabled: true
                   signType: $(SignType)
                   zipSources: false
+                  signWithProd: true
             steps:
               - template: /build/build.yml@self
                 parameters:
