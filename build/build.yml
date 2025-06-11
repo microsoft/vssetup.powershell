@@ -58,7 +58,7 @@ steps:
     inputs:
       dockerComposeFile: docker/docker-compose.yml
       action: Build services
-      additionalArguments: "-p microsoft-vssetup-powershell"  # Explicitly setting project name
+      projectName: "microsoft-vssetup-powershell" # Explicitly setting project name
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
