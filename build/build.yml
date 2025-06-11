@@ -1,6 +1,9 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 
+variables:
+  DockerProjectName: microsoft-vssetup-powershell
+
 parameters:
   BuildConfiguration: Release
   BuildPlatform: Any CPU
@@ -58,7 +61,7 @@ steps:
     inputs:
       dockerComposeFile: docker/docker-compose.yml
       action: Build services
-      projectName: "microsoft-vssetup-powershell" # Explicitly setting project name
+      projectName: ${{ variables.DockerProjectName }}
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
@@ -70,6 +73,7 @@ steps:
       serviceName: test
       containerCommand: -Command Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
       detached: false
+      projectName: ${{ variables.DockerProjectName }}
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
