@@ -7,6 +7,7 @@ parameters:
   Docker: false
   Sign: false
   PublishArtifactTemplate: /build/templates/1es-publish-task.yml@self
+  DockerProjectName: microsoft-vssetup-powershell
 
 steps:
 - pwsh: |
@@ -58,6 +59,7 @@ steps:
     inputs:
       dockerComposeFile: docker/docker-compose.yml
       action: Build services
+      projectName: ${{ parameters.DockerProjectName }}
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
@@ -69,6 +71,7 @@ steps:
       serviceName: test
       containerCommand: -Command Invoke-Pester C:\Tests -EnableExit -OutputFile C:\Tests\Results.xml -OutputFormat NUnitXml
       detached: false
+      projectName: ${{ parameters.DockerProjectName }}
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
