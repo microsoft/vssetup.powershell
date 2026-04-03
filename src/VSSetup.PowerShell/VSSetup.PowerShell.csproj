@@ -48,7 +48,7 @@
     <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" version="1.0.0" />
     <PackageReference Include="Microsoft.PowerShell.2.ReferenceAssemblies" version="1.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" version="1.11.2290" />
-    <PackageReference Include="Nerdbank.GitVersioning" version="2.3.186" />
+    <PackageReference Include="Nerdbank.GitVersioning" version="3.9.50" />
     <PackageReference Include="StyleCop.Analyzers" version="1.1.118" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
   </ItemGroup>
