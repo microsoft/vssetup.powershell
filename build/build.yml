@@ -54,7 +54,7 @@ steps:
 
 - ${{ if eq(parameters.Docker, 'true') }}:
   # Make sure service images are rebuilt if Dockerfiles changed.
-  - task: DockerCompose@0
+  - task: DockerCompose@1
     displayName: Build images
     inputs:
       dockerComposeFile: docker/docker-compose.yml
@@ -63,7 +63,7 @@ steps:
     env:
       CONFIGURATION: ${{ parameters.BuildConfiguration }}
 
-  - task: DockerCompose@0
+  - task: DockerCompose@1
     displayName: Runtime tests
     inputs:
       dockerComposeFile: docker/docker-compose.yml
