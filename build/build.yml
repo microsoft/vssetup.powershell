@@ -11,7 +11,8 @@ parameters:
 
 steps:
 - pwsh: |
-    dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" nbgv
+    dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" `
+     --configfile "$(Build.SourcesDirectory)\NuGet.config" nbgv
     $version = & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" get-version --variable SemVer1
     & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" cloud --version $version
   displayName: Set cloud build version
@@ -21,6 +22,9 @@ steps:
 
 - task: NuGetCommand@2
   displayName: Restore nuget packages
+  inputs:
+    feedsToUse: config
+    nugetConfigPath: $(Build.SourcesDirectory)\NuGet.config
 
 - pwsh: |
     Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
@@ -115,6 +119,8 @@ steps:
     displayName: Restore nuget packages
     inputs:
       restoreSolution: $(Build.SourcesDirectory)\pkg\VSSetup\VSSetup.signproj
+      feedsToUse: config
+      nugetConfigPath: $(Build.SourcesDirectory)\NuGet.config
 
   - task: VSBuild@1
     displayName: Sign packages
