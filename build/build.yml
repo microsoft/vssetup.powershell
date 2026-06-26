@@ -10,6 +10,9 @@ parameters:
   DockerProjectName: microsoft-vssetup-powershell
 
 steps:
+- task: NuGetAuthenticate@1
+  displayName: Authenticate to Azure Artifacts
+
 - pwsh: |
     dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" `
      --configfile "$(Build.SourcesDirectory)\NuGet.config" nbgv
