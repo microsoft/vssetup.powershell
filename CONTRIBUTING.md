@@ -17,6 +17,17 @@ Code analysis and style cop rules are defined for this solution, but are current
 
 If you add any commands please update the `Tags` property of the _VSSetup.nuproj_ project as appropriate. This project is used instead of `Publish-Module` from the _PowerShellGet_ module because it works better with the build systems and can be tested on developer machines without also publishing.
 
+## Documentation
+
+Cmdlet and `about_` help is authored as markdown under _docs\VSSetup_ and compiled into PowerShell help artifacts (_Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml_ and _about_VSSetup.help.txt_) using [platyPS][platyps].
+
+Because the official build runs under network isolation and cannot reach the PowerShell Gallery, these artifacts are **checked in** under _src\VSSetup.PowerShell\help_ and copied to the build output by the project rather than generated during the build. If you change any markdown under _docs\VSSetup_, regenerate and commit the artifacts locally:
+
+```powershell
+Install-Module -Name platyPS -Scope CurrentUser -Force
+build\Update-Help.ps1
+```
+
 ## Building
 
 Before you can build this project from the command line with MSBuild or within Visual Studio, you must restore packages including the [embeddable interop types][interop].
@@ -96,3 +107,4 @@ Thank you for your contributions!
   [samples]: https://aka.ms/setup/configuration/samples
   [docs]: https://aka.ms/setup/configuration/docs
   [interop]: https://aka.ms/setup/configuration/interop
+  [platyps]: https://github.com/PowerShell/platyPS

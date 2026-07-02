@@ -36,6 +36,14 @@
     <Content Include="VSSetup.psm1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="help\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="help\about_VSSetup.help.txt">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Template Include="VSSetup.psd1" />
   </ItemGroup>
   <ItemGroup>
