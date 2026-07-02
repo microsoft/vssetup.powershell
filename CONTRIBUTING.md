@@ -19,9 +19,7 @@ If you add any commands please update the `Tags` property of the _VSSetup.nuproj
 
 ## Documentation
 
-Cmdlet and `about_` help is authored as markdown under _docs\VSSetup_ and compiled into PowerShell help artifacts (_Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml_ and _about_VSSetup.help.txt_) using [platyPS][platyps].
-
-Because the official build runs under network isolation and cannot reach the PowerShell Gallery, these artifacts are **checked in** under _src\VSSetup.PowerShell\help_ and copied to the build output by the project rather than generated during the build. If you change any markdown under _docs\VSSetup_, regenerate and commit the artifacts locally:
+Cmdlet and `about_` help is authored as markdown under _docs\VSSetup_ and compiled into the checked-in help artifacts under _src\VSSetup.PowerShell\help_. If you change any markdown under _docs\VSSetup_, regenerate these artifacts and check the updated output files in as part of the same pull request:
 
 ```powershell
 Install-Module -Name platyPS -Scope CurrentUser -Force
@@ -107,4 +105,3 @@ Thank you for your contributions!
   [samples]: https://aka.ms/setup/configuration/samples
   [docs]: https://aka.ms/setup/configuration/docs
   [interop]: https://aka.ms/setup/configuration/interop
-  [platyps]: https://github.com/PowerShell/platyPS
