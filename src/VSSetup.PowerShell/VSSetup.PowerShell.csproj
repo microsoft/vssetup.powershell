@@ -6,7 +6,6 @@
     <RootNamespace>Microsoft.VisualStudio.Setup</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell</AssemblyName>
     <TargetFramework>net462</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>Visual Studio Setup PowerShell Module</AssemblyTitle>
@@ -35,14 +34,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="VSSetup.psm1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="help\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml">
-      <Link>%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="help\about_VSSetup.help.txt">
-      <Link>%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Template Include="VSSetup.psd1" />
@@ -74,6 +65,14 @@
         <Authenticode>Microsoft400</Authenticode>
       </FilesToSign>
     </ItemGroup>
+  </Target>
+
+  <!-- Place the checked-in help artifacts alongside LICENSE in bin\$(Configuration) so the
+       Archive and pack steps pick them up, matching the old New-ExternalHelp output location. -->
+  <Target Name="CopyHelpArtifacts" AfterTargets="Build">
+    <Copy SourceFiles="help\Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml;help\about_VSSetup.help.txt"
+          DestinationFolder="$(MSBuildProjectDirectory)\bin\$(Configuration)"
+          SkipUnchangedFiles="true" />
   </Target>
 
 </Project>
