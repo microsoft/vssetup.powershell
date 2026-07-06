@@ -6,6 +6,7 @@
     <RootNamespace>Microsoft.VisualStudio.Setup</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.Setup.PowerShell</AssemblyName>
     <TargetFramework>net462</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>Visual Studio Setup PowerShell Module</AssemblyTitle>
