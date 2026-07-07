@@ -14,7 +14,7 @@
 
 .NOTES
     Requires the platyPS module. Install it locally with:
-        Install-Module -Name platyPS -Scope CurrentUser -Force
+        Install-Module -Name platyPS -Scope CurrentUser
 #>
 [CmdletBinding()]
 param()
