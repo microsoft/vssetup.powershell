@@ -26,7 +26,7 @@ $docsPath = Join-Path $repoRoot 'docs\VSSetup'
 $outputPath = Join-Path $repoRoot 'src\VSSetup.PowerShell\help'
 
 if (-not (Get-Module -ListAvailable -Name platyPS)) {
-    throw "platyPS is not installed. Run: Install-Module -Name platyPS -Scope CurrentUser -Force"
+    throw "platyPS is not installed. Run: Install-Module -Name platyPS -Scope CurrentUser"
 }
 
 Import-Module platyPS
