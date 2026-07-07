@@ -22,7 +22,7 @@ If you add any commands please update the `Tags` property of the _VSSetup.nuproj
 Cmdlet and `about_` help is authored as markdown under _docs\VSSetup_ and compiled into the checked-in help artifacts under _src\VSSetup.PowerShell\help_. If you change any markdown under _docs\VSSetup_, regenerate these artifacts and check the updated output files in as part of the same pull request:
 
 ```powershell
-Install-Module -Name platyPS -Scope CurrentUser -Force
+Install-Module -Name platyPS -Scope CurrentUser
 build\Update-Help.ps1
 ```
 
