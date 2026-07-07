@@ -17,6 +17,15 @@ Code analysis and style cop rules are defined for this solution, but are current
 
 If you add any commands please update the `Tags` property of the _VSSetup.nuproj_ project as appropriate. This project is used instead of `Publish-Module` from the _PowerShellGet_ module because it works better with the build systems and can be tested on developer machines without also publishing.
 
+## Documentation
+
+Cmdlet and `about_` help is authored as markdown under _docs\VSSetup_ and compiled into the checked-in help artifacts under _src\VSSetup.PowerShell\help_. If you change any markdown under _docs\VSSetup_, regenerate these artifacts and check the updated output files in as part of the same pull request:
+
+```powershell
+Install-Module -Name platyPS -Scope CurrentUser
+build\Update-Help.ps1
+```
+
 ## Building
 
 Before you can build this project from the command line with MSBuild or within Visual Studio, you must restore packages including the [embeddable interop types][interop].

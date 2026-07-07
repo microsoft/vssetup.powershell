@@ -10,8 +10,12 @@ parameters:
   DockerProjectName: microsoft-vssetup-powershell
 
 steps:
+- task: NuGetAuthenticate@1
+  displayName: Authenticate to Azure Artifacts
+
 - pwsh: |
-    dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" nbgv
+    dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" `
+     --configfile "$(Build.SourcesDirectory)\NuGet.config" nbgv
     $version = & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" get-version --variable SemVer1
     & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" cloud --version $version
   displayName: Set cloud build version
@@ -21,17 +25,9 @@ steps:
 
 - task: NuGetCommand@2
   displayName: Restore nuget packages
-
-- pwsh: |
-    Install-Module -Name platyPS -Repository PSGallery -SkipPublisherCheck -Force
-  displayName: Install PowerShell modules
-
-- pwsh: |
-    New-ExternalHelp -Path docs\VSSetup -OutputPath "src\VSSetup.PowerShell\bin\${env:CONFIGURATION}" -Force
-  displayName: Compile documentation
-  env:
-    CONFIGURATION: ${{ parameters.BuildConfiguration }}
-  workingDirectory: $(Build.SourcesDirectory)
+  inputs:
+    feedsToUse: config
+    nugetConfigPath: $(Build.SourcesDirectory)\NuGet.config
 
 - task: VSBuild@1
   displayName: Build solution
@@ -115,6 +111,8 @@ steps:
     displayName: Restore nuget packages
     inputs:
       restoreSolution: $(Build.SourcesDirectory)\pkg\VSSetup\VSSetup.signproj
+      feedsToUse: config
+      nugetConfigPath: $(Build.SourcesDirectory)\NuGet.config
 
   - task: VSBuild@1
     displayName: Sign packages
