@@ -1,0 +1,161 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+parameters:
+# Runs a real agent build to validate artifact download, template expansion, and symbol
+# archival (to internal symweb only), while skipping GitHub release, NuGet publish, and
+# manual approval so testing doesn't trigger real publishing or approver emails.
+- name: publishPreview
+  displayName: Preview run
+  type: boolean
+  default: false
+
+trigger: none
+
+name: Release-$(resources.pipeline.VSSetup-PowerShell.runName)-$(Rev:rr)
+variables:
+- name: Configuration
+  value: Release
+
+resources:
+  pipelines:
+  - pipeline: 'VSSetup-PowerShell'
+    project: 'DevDiv'
+    source: 'Setup\Setup-VSSetup.PowerShell-CI'
+    branch: develop
+    trigger:
+      branches:
+        include:
+        - develop
+
+  repositories:
+  - repository: MicroBuildTemplate
+    type: git
+    name: 1ESPipelineTemplates/MicroBuildTemplate
+    ref: refs/tags/release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
+  parameters:
+    settings:
+      networkIsolationPolicy: Permissive
+    sdl:
+      sourceAnalysisPool: AzurePipelines-EO
+    pool:
+      name: VSEngSS-MicroBuild2022-1ES
+
+    stages:
+    - stage: Archive_Stage
+      displayName: Archive
+      jobs:
+      - job: Archive_Job
+        displayName: Archive symbols
+        templateContext:
+          type: releaseJob
+          isProduction: true
+          inputs:
+          - input: pipelineArtifact
+            pipeline: VSSetup-PowerShell
+            artifactName: drop
+            targetPath: $(Pipeline.Workspace)\VSSetup-PowerShell\drop
+        steps:
+        - task: CopyFiles@2
+          displayName: Copy symbol files
+          inputs:
+            SourceFolder: $(Pipeline.Workspace)\VSSetup-PowerShell\drop
+            Contents: |-
+              **\bin\$(Configuration)\**\*.dll
+              **\bin\$(Configuration)\**\*.exe
+              **\bin\$(Configuration)\**\*.pdb
+            TargetFolder: $(Build.ArtifactStagingDirectory)\Symbols
+            CleanTargetFolder: true
+
+        - task: MicroBuildArchiveSymbols@6
+          displayName: Archive symbols on Symweb
+          inputs:
+            ServiceConnectionId: VSEng-SymbolsUpload
+            SymbolsFeatureName: VSSetup PowerShell
+            SymbolsProject: VS
+            SymbolsAgentPath: $(Build.ArtifactStagingDirectory)\Symbols
+            ${{ if parameters.publishPreview }}:
+              SubmitToInternet: false
+          env:
+            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+    - stage: Publish_Stage
+      displayName: Publish
+      dependsOn: Archive_Stage
+      jobs:
+      - ${{ if not(parameters.publishPreview) }}:
+        - job: PreDeploymentApprovalJob
+          displayName: Pre-Deployment Approval
+          timeoutInMinutes: 43200 # 30 days
+          pool: server
+          steps:
+          - task: ManualValidation@1
+            inputs:
+              notifyUsers: |-
+                [DevDiv]\Setup Approvers
+              approvers: |-
+                [DevDiv]\Setup Approvers
+
+      - job: Publish_Job
+        displayName: Publish
+        ${{ if not(parameters.publishPreview) }}:
+          dependsOn: PreDeploymentApprovalJob
+        condition: succeeded()
+        timeoutInMinutes: 0
+        templateContext:
+          type: releaseJob
+          isProduction: true
+          inputs:
+          - input: pipelineArtifact
+            pipeline: VSSetup-PowerShell
+            artifactName: drop
+            targetPath: $(Pipeline.Workspace)\VSSetup-PowerShell\drop
+        steps:
+        - ${{ if not(parameters.publishPreview) }}:
+          - task: GitHubRelease@1
+            displayName: Publish prerelease to GitHub
+            condition: and(succeeded(), ne(variables['resources.pipeline.VSSetup-PowerShell.sourceBranch'], 'refs/heads/develop'))
+            inputs:
+              gitHubConnection: 5e7bb9ab-1d6e-410a-81b2-ea285b42eec8
+              repositoryName: Microsoft/vssetup.powershell
+              target: $(resources.pipeline.VSSetup-PowerShell.sourceCommit)
+              tagSource: manual
+              tag: $(resources.pipeline.VSSetup-PowerShell.runName)
+              assets: $(Pipeline.Workspace)\VSSetup-PowerShell\drop\bin\Release\VSSetup.zip
+              isPreRelease: true
+
+          - task: GitHubRelease@1
+            displayName: Publish release to GitHub
+            condition: and(succeeded(), eq(variables['resources.pipeline.VSSetup-PowerShell.sourceBranch'], 'refs/heads/develop'))
+            inputs:
+              gitHubConnection: 5e7bb9ab-1d6e-410a-81b2-ea285b42eec8
+              repositoryName: Microsoft/vssetup.powershell
+              target: $(resources.pipeline.VSSetup-PowerShell.sourceCommit)
+              tagSource: manual
+              tag: $(resources.pipeline.VSSetup-PowerShell.runName)
+              assets: $(Pipeline.Workspace)\VSSetup-PowerShell\drop\bin\Release\VSSetup.zip
+
+          - task: NuGetToolInstaller@1
+            displayName: Install NuGet
+            inputs:
+              versionSpec: 4.3.0
+
+          - task: 1ES.PublishNuGet@1
+            displayName: 'Publish to powershellgallery.com'
+            inputs:
+              packageParentPath: '$(Build.ArtifactStagingDirectory)'
+              packagesToPush: $(Pipeline.Workspace)\VSSetup-PowerShell\drop\bin\$(Configuration)\**\*.nupkg;!**\*.symbols.nupkg
+              nuGetFeedType: external
+              externalEndpoint: powershellgallery.com (v2, VSSetup)
+
+          - task: 1ES.PublishNuGet@1
+            displayName: 'Publish to Setup feed'
+            inputs:
+              packageParentPath: '$(Build.ArtifactStagingDirectory)'
+              packagesToPush: $(Pipeline.Workspace)\VSSetup-PowerShell\drop\bin\$(Configuration)\**\*.nupkg;
+              feedPublish: 464ffa7a-b25b-4cea-94a0-04ddcbdfc284
+              allowPackageConflicts: true
+              externalEndpoint: powershellgallery.com (v2, VSSetup)
