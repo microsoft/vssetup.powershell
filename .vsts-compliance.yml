@@ -40,7 +40,7 @@ extends:
   template: azure-pipelines/MicroBuild.1ES.Unofficial.yml@MicroBuildTemplate
   parameters:
     settings:
-      networkIsolationPolicy: Permissive,CFSClean,CFSClean2
+      networkIsolationPolicy: DefaultDeny
     pool:
       name: VSEngSS-MicroBuild2022-1ES
     sdl:
