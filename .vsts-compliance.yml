@@ -42,7 +42,7 @@ extends:
     settings:
       networkIsolationPolicy: DefaultDeny
     pool:
-      name: VSEngSS-MicroBuild2022-1ES
+      name: VSEng-MicroBuildVSStable
     sdl:
       sourceAnalysisPool:
         name: AzurePipelines-EO
