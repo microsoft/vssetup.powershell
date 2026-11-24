@@ -37,7 +37,7 @@ steps:
     msbuildArgs: /p:RunCodeAnalysis=true /p:TreatWarningsAsErrors=true "/flp:Verbosity=Diagnostic;LogFile=$(Build.ArtifactStagingDirectory)\logs\build.log"
     maximumCpuCount: true
 
-- task: VSTest@2
+- task: VSTest@3
   displayName: Functional tests
   inputs:
     testAssemblyVer2: |
